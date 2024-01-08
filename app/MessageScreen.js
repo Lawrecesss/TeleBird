@@ -1,6 +1,7 @@
 import React from 'react';
 import { SafeAreaView, FlatList } from 'react-native';
 import ListItem from '../components/ListItem';
+import ListItemSeparator from '../components/ListItemSeparator';
 
 const messages = [
     {
@@ -23,7 +24,8 @@ function MessageScreen(props) {
             <FlatList data={messages} 
             keyExtractor={message => message.id.toString()} 
             renderItem={({item}) => 
-            <ListItem name={item.title} listings={item.description} image={item.imagen}/>}/>
+            <ListItem name={item.title} listings={item.description} image={item.image}/>}
+            ItemSeparatorComponent={ListItemSeparator}/>
         </SafeAreaView>
     );
 }
