@@ -3,9 +3,10 @@ import { StyleSheet, Text, View, Image, SafeAreaView, ImageBackground } from 're
 import {useDimensions, useDeviceOrientation} from "@react-native-community/hooks"
 import Welcome from "./app/Welcome.js"
 import CardScreen from './app/CardScreen.js';
+import ListingDetailScreen from './app/ListingDetailScreen.js';
 
 export default function App() {
-  return <CardScreen/>;
+  return <ListingDetailScreen/>;
 }
 
 

@@ -10,7 +10,7 @@ export default function ImageView(){
                 <View style={styles.btn1}/>
                 <View style={styles.btn2}/>
             </View>
-            <Card title={"Red jacket for sale"} subtitle={"100$"} image={"https://www.superdry.sg/cdn/shop/products/Y5010159A5PP_4_1200x.jpg?v=1657768433"}/>
+            <Card title={"Red jacket for sale!"} subtitle={"100$"} image={"https://www.superdry.sg/cdn/shop/products/Y5010159A5PP_4_1200x.jpg?v=1657768433"}/>
         </SafeAreaView>
     )
 }
