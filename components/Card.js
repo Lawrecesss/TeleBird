@@ -5,7 +5,7 @@ function Card({title, subtitle, image}) {
     return (
         <View style={styles.cardContainer}>
             <View style={styles.imageContainer}>
-                <Image style={styles.image} source={{uri:image}}/>
+                <Image resizeMode='cover' style={styles.image} source={{uri:image}}/>
                 <Text style={styles.text}>{title}</Text>
                 <Text style={styles.subtitle}>{subtitle}</Text>
             </View>
@@ -17,7 +17,6 @@ const styles = StyleSheet.create({
         width:"100%",
         height:300,
         marginBottom:20,
-        resizeMode:"cover"
     },
     cardContainer:{
         width:"100%",
