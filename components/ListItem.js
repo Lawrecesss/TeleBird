@@ -13,9 +13,9 @@ function ListItem({name, listings, image}) {
 }
 const styles = StyleSheet.create({
     image:{
-        width:60,
-        height:60,
-        borderRadius:50,
+        width:70,
+        height:70,
+        borderRadius:35,
 
     },
     name:{
