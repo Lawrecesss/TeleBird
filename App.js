@@ -5,9 +5,10 @@ import Welcome from "./app/Welcome.js"
 import CardScreen from './app/CardScreen.js';
 import ListingDetailScreen from './app/ListingDetailScreen.js';
 import ViewImage from './app/ViewImage.js';
+import MessageScreen from './app/MessageScreen.js';
 
 export default function App() {
-  return <ViewImage/>;
+  return <MessageScreen/>;
 }
 
 
