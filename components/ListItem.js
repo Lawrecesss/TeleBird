@@ -1,10 +1,10 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableHighlight } from 'react-native';
 import {Swipeable, GestureHandlerRootView} from 'react-native-gesture-handler';
-function ListItem({name, listings, image, onPress, renderRight}) {
+function ListItem({name, listings, image, onPress, renderRightActions}) {
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
-            <Swipeable renderRightActions={renderRight}>
+            <Swipeable renderRightActions={renderRightActions}>
                 <TouchableHighlight underlayColor={"lightgrey"} onPress={onPress}>
                     <View style={styles.listContainer}>
                         <Image style={styles.image} source={{uri:image}}/>

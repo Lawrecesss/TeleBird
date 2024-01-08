@@ -2,6 +2,7 @@ import React from 'react';
 import { SafeAreaView, FlatList, View} from 'react-native';
 import ListItem from '../components/ListItem';
 import ListItemSeparator from '../components/ListItemSeparator';
+import ListItemDeleteAction from '../components/ListItemDeleteAction';
 
 const messages = [
     {
@@ -28,13 +29,8 @@ function MessageScreen(props) {
                 name={item.title} 
                 listings={item.description} 
                 image={item.image} 
-                onPress={()=> console.log("selected" + item.title)} 
-                renderRight={()=>
-                    <View style={{
-                        backgroundColor:"green", 
-                        width:70}}>
-                    </View>}
-                    /> 
+                onPress={()=> console.log("selected" + item.title)}
+                renderRightActions={ListItemDeleteAction}/> 
                 )}
             ItemSeparatorComponent={ListItemSeparator}/>
         </SafeAreaView>
