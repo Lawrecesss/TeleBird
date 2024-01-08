@@ -1,14 +1,19 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
-function ListItem({name, listings, image}) {
+import { View, Text, Image, StyleSheet, TouchableHighlight } from 'react-native';
+import Swipeable from 'react-native-gesture-handler/Swipeable';
+function ListItem({name, listings, image, onPress, renderRight}) {
     return (
-        <View style={styles.listContainer}>
-            <Image style={styles.image} source={{uri:image}}/>
-            <View style={styles.nameContainer}>
-                <Text style={styles.name}>{name}</Text>
-                <Text style={styles.listings}>{listings}</Text>
-            </View>
-        </View>
+        <Swipeable renderRightActions={renderRight}>
+            <TouchableHighlight underlayColor={"lightgrey"} onPress={onPress}>
+                <View style={styles.listContainer}>
+                    <Image style={styles.image} source={{uri:image}}/>
+                    <View style={styles.nameContainer}>
+                        <Text style={styles.name}>{name}</Text>
+                        <Text style={styles.listings}>{listings}</Text>
+                    </View>
+                </View>
+            </TouchableHighlight>
+        </Swipeable>
     )
 }
 const styles = StyleSheet.create({

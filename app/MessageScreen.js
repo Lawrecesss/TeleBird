@@ -1,5 +1,5 @@
 import React from 'react';
-import { SafeAreaView, FlatList } from 'react-native';
+import { SafeAreaView, FlatList, View} from 'react-native';
 import ListItem from '../components/ListItem';
 import ListItemSeparator from '../components/ListItemSeparator';
 
@@ -24,7 +24,18 @@ function MessageScreen(props) {
             <FlatList data={messages} 
             keyExtractor={message => message.id.toString()} 
             renderItem={({item}) => 
-            <ListItem name={item.title} listings={item.description} image={item.image}/>}
+            (<ListItem 
+                name={item.title} 
+                listings={item.description} 
+                image={item.image} 
+                onPress={()=> console.log("selected" + item.title)} 
+                renderRight={()=>
+                    <View style={{
+                        backgroundColor:"green", 
+                        width:70}}>
+                    </View>}
+                    /> 
+                )}
             ItemSeparatorComponent={ListItemSeparator}/>
         </SafeAreaView>
     );
