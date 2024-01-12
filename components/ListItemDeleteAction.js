@@ -1,18 +1,27 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, TouchableWithoutFeedback} from 'react-native';
 import {MaterialCommunityIcons} from "@expo/vector-icons"
+import {} from 'react-native-gesture-handler';
 
-function ListItemDeleteAction() {
+function ListItemDeleteAction({onPress}) {
     return (
-        <View style={styles.container}>
-            <MaterialCommunityIcons name='delete' size={30} color={"white"}/>
-        </View>
+        <TouchableWithoutFeedback onPress={onPress}>
+            <View style={styles.container}>
+                <MaterialCommunityIcons style={styles.icon} name='delete' size={30} color={"white"}/>
+            </View>
+        </TouchableWithoutFeedback>
+        
     );
 }
 const styles = StyleSheet.create({
     container:{
         backgroundColor: "red",
-        width: 70,
+        width: 80,
+        justifyContent: "center",
+        alignItems: "center"
+    },
+    icon:{
+
     }
 })
 
