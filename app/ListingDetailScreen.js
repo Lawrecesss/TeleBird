@@ -1,36 +1,40 @@
 import React from 'react';
-import { SafeAreaView, Text, Image, StyleSheet} from 'react-native';
-import ListItem from '../components/ListItem';
+import { SafeAreaView, Text, Image, StyleSheet, FlatList} from 'react-native';
+import Screen from '../components/Screen';
+import Card from '../components/Card';
 
+
+const listings = [
+    {
+        id:1,
+        title: "Red Jacket For Sale!",
+        subtitle: "100",
+        image: "https://www.superdry.sg/cdn/shop/products/Y5010159A5PP_4_1200x.jpg?v=1657768433",
+    },
+    {
+        id:2,
+        title: "Percy Jackson Serie",
+        subtitle: "150",
+        image: "https://m.media-amazon.com/images/I/817bp+OOARL._AC_UF1000,1000_QL80_.jpg"
+    }
+]
 function ListingDetailScreen(props) {
     return (
-        <SafeAreaView>
-            <Image style={styles.image} source={{uri:"https://www.superdry.sg/cdn/shop/products/Y5010159A5PP_4_1200x.jpg?v=1657768433"}}/>
-            <Text style={styles.text}>Red jacket for sale!</Text>
-            <Text style={styles.subtitle}>100$</Text>
-            <ListItem name={"Lawrence"} listings={"5 Listings"} image={"https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"}/>
-        </SafeAreaView>
+        <Screen style={{backgroundColor:"lightgrey"}}>
+            <FlatList
+            data={listings}
+            keyExtractor={(listing) => listing.id.toString()}
+            renderItem={({item}) => (
+                <Card 
+                title={item.title}
+                subtitle={"$" + item.subtitle}
+                image={item.image}/>
+            )}/>
+        </Screen>
     );
 }
 const styles = StyleSheet.create({
-    image:{
-        width:"100%",
-        height:300,
-        marginBottom: 20,
-    },
-    text: {
-        marginLeft: 20,
-        marginRight:20,
-        marginBottom: 20,
-        fontWeight: 'bold'
-
-    },
-    subtitle: {
-        marginLeft: 20,
-        marginBottom: 20,
-        color: "green",
-        fontWeight: 'bold'
-    }
+    
     
 })
 export default ListingDetailScreen;

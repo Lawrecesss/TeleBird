@@ -15,7 +15,7 @@ function Card({title, subtitle, image}) {
 const styles = StyleSheet.create({
     image:{
         width:"100%",
-        height:300,
+        height:250,
         marginBottom:20,
     },
     cardContainer:{

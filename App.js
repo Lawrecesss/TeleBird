@@ -10,7 +10,7 @@ import AccountScreen from "./app/AccountScreen.js"
 import Icon from './components/Icon.js';
 
 export default function App() {
-  return <AccountScreen/>;
+  return <ListingDetailScreen/>;
 }
 
 

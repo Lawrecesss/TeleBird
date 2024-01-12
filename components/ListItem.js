@@ -1,13 +1,13 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableHighlight } from 'react-native';
 import {Swipeable, GestureHandlerRootView} from 'react-native-gesture-handler';
-function ListItem({title, subTitle, image, ImageComponent, onPress, renderRightActions}) {
+function ListItem({title, subTitle, image, IconComponent, onPress, renderRightActions, style}) {
     return (
-        <GestureHandlerRootView style={{ flex: 1 }}>
+        <GestureHandlerRootView>
             <Swipeable renderRightActions={renderRightActions}>
                 <TouchableHighlight underlayColor={"lightgrey"} onPress={onPress}>
-                    <View style={styles.listContainer}>
-                        {ImageComponent}
+                    <View style={[styles.listContainer, style]}>
+                        {IconComponent}
                         {image && <Image style={styles.image} source={{uri:image}}/>}
                         <View style={styles.nameContainer}>
                             <Text style={styles.title}>{title}</Text>
@@ -39,12 +39,15 @@ const styles = StyleSheet.create({
     listContainer:{
         padding:20,
         flexDirection:"row",
+        
+    
     },
     nameContainer:{
         marginLeft:20,
         justifyContent: "center"
 
     },
+    
 
 
 })
