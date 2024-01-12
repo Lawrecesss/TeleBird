@@ -34,8 +34,8 @@ function MessageScreen(props) {
             keyExtractor={message => message.id.toString()} 
             renderItem={({item}) => 
             (<ListItem 
-                name={item.title} 
-                listings={item.description} 
+                title={item.title} 
+                subTitle={item.description} 
                 image={item.image} 
                 onPress={()=> console.log("selected" + item.title)}
                 renderRightActions={()=> <ListItemDeleteAction onPress={()=> handleDelete(item)}/>}/> 

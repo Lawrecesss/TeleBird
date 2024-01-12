@@ -1,16 +1,17 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableHighlight } from 'react-native';
 import {Swipeable, GestureHandlerRootView} from 'react-native-gesture-handler';
-function ListItem({name, listings, image, onPress, renderRightActions}) {
+function ListItem({title, subTitle, image, ImageComponent, onPress, renderRightActions}) {
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
             <Swipeable renderRightActions={renderRightActions}>
                 <TouchableHighlight underlayColor={"lightgrey"} onPress={onPress}>
                     <View style={styles.listContainer}>
-                        <Image style={styles.image} source={{uri:image}}/>
+                        {ImageComponent}
+                        {image && <Image style={styles.image} source={{uri:image}}/>}
                         <View style={styles.nameContainer}>
-                            <Text style={styles.name}>{name}</Text>
-                            <Text style={styles.listings}>{listings}</Text>
+                            <Text style={styles.title}>{title}</Text>
+                            {subTitle && <Text style={styles.subTitle}>{subTitle}</Text>}
                         </View>
                     </View>
                 </TouchableHighlight>
@@ -27,12 +28,12 @@ const styles = StyleSheet.create({
         borderRadius:35,
 
     },
-    name:{
+    title:{
         fontWeight: 'bold',
         marginBottom: 10
 
     },
-    listings:{
+    subTitle:{
         color: "grey"
     },
     listContainer:{
@@ -40,7 +41,8 @@ const styles = StyleSheet.create({
         flexDirection:"row",
     },
     nameContainer:{
-        marginLeft:30,
+        marginLeft:20,
+        justifyContent: "center"
 
     },
 
