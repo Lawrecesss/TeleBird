@@ -19,6 +19,7 @@ function LogInScreen(props) {
 }
 const styles = StyleSheet.create({
     container:{
+        marginTop:300,
         alignItems:"center",
         
     
