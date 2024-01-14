@@ -19,8 +19,8 @@ function LogInScreen(props) {
 }
 const styles = StyleSheet.create({
     container:{
-        // alignItems:"center",
-        // justifyContent:"flex-end"
+        alignItems:"center",
+        
     
     },
     btn:{
