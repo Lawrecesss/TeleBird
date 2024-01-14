@@ -8,9 +8,15 @@ import ViewImage from './app/ViewImage.js';
 import MessageScreen from './app/MessageScreen.js';
 import AccountScreen from "./app/AccountScreen.js"
 import Icon from './components/Icon.js';
+import AppTextInput from './components/AppTextInput.js';
+import Screen from './components/Screen.js';
 
 export default function App() {
-  return <ListingDetailScreen/>;
+  return (
+    <Screen>
+      <AppTextInput placeholder="Username"/>
+    </Screen>
+  )
 }
 
 

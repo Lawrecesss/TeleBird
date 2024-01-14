@@ -13,7 +13,7 @@ const listings = [
     },
     {
         id:2,
-        title: "Percy Jackson Serie",
+        title: "Percy Jackson Collection!!",
         subtitle: "150",
         image: "https://m.media-amazon.com/images/I/817bp+OOARL._AC_UF1000,1000_QL80_.jpg"
     }
