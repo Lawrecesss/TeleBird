@@ -3,7 +3,6 @@ import AppTextInput from '../components/AppTextInput';
 import AppButton from '../components/AppButton';
 import { StyleSheet } from 'react-native';
 import BackgroundScreen from '../components/BackgroundScreen';
-import defaultStyles from "../configs/styles"
 function LogInScreen(props) {
     return (
         <BackgroundScreen style={styles.container} source={require("../assets/bg.png")}>
@@ -29,7 +28,7 @@ const styles = StyleSheet.create({
         height:50
     },
     input:{
-        justifyContent:"center",
+        // justifyContent:"center",
         width:"70%",
         backgroundColor: "white",
 
