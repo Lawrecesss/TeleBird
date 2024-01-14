@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, StyleSheet, FlatList} from 'react-native';
-import Screen from '../components/Screen';
+import Screen from '../components/BackgroundScreen';
 import Icon from '../components/Icon';
 import ListItem from '../components/ListItem';
 import ListItemSeparator from '../components/ListItemSeparator';
@@ -11,35 +11,35 @@ const menuItem = [
         icon: {
             name: "account-edit",
             backgroundColor : "blue",
-        }
+        },
     },
     {
         title: "Update Profile Picture",
         icon:{
             name:"image-edit",
             backgroundColor: "green"
-        }
+        },
     },
     {
         title: "Theme",
         icon:{
             name:"theme-light-dark",
             backgroundColor: "brown"
-        }
+        },
     },
     {
         title: "Default Language",
         icon:{
             name:"translate",
             backgroundColor: "orange"
-        }
+        },
     },
     {
         title: "Privacy",
         icon:{
             name:"security",
             backgroundColor: "black"
-        }
+        },
     },
     
 ]
@@ -67,6 +67,7 @@ function AccountScreen(props) {
             backgroundColor={item.icon.backgroundColor} 
             size={40}
             color={"white"}/>}
+        Switch={item.switch}
         />}
         ItemSeparatorComponent={ListItemSeparator}
         />

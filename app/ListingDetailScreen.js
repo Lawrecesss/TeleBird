@@ -1,6 +1,6 @@
 import React from 'react';
 import { SafeAreaView, Text, Image, StyleSheet, FlatList} from 'react-native';
-import Screen from '../components/Screen';
+import Screen from '../components/BackgroundScreen';
 import Card from '../components/Card';
 
 

@@ -1,7 +1,8 @@
-import React from 'react';
-import { View, Text, Image, StyleSheet, TouchableHighlight } from 'react-native';
+import {React, useState} from 'react';
+import { View, Text, Image, StyleSheet, TouchableHighlight, Switch } from 'react-native';
 import {Swipeable, GestureHandlerRootView} from 'react-native-gesture-handler';
 function ListItem({title, subTitle, image, IconComponent, onPress, renderRightActions, style}) {
+    const [isNew, setIsNew] = useState(false)
     return (
         <GestureHandlerRootView>
             <Swipeable renderRightActions={renderRightActions}>

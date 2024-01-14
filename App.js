@@ -9,13 +9,23 @@ import MessageScreen from './app/MessageScreen.js';
 import AccountScreen from "./app/AccountScreen.js"
 import Icon from './components/Icon.js';
 import AppTextInput from './components/AppTextInput.js';
-import Screen from './components/Screen.js';
+import Screen from './components/BackgroundScreen.js';
+import {Picker} from "@react-native-picker/picker"
+import {React, useState} from 'react';
+import DropdownPicker from "react-native-dropdown-picker"
+import AppPicker from './components/AppPicker.js';
+import LogInScreen from './app/LogInScreen.js';
 
+const categories = [
+  {label:"clothing", value:1},
+  {label:"phone", value:2},
+  {label:"beer", value:3},
+]
 export default function App() {
+  const [category, setCategory] = useState()
   return (
-    <Screen>
-      <AppTextInput placeholder="Username"/>
-    </Screen>
+    <LogInScreen/>
+    
   )
 }
 
