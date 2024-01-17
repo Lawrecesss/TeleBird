@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Text, View , StyleSheet, TouchableWithoutFeedback, Modal, Button, FlatList} from 'react-native';
 import {MaterialCommunityIcons} from "@expo/vector-icons"
-import Screen from './BackgroundScreen';
+import Screen from '../screens/BackgroundScreen';
 import PickerItem from './PickerItem';
 
 function AppPicker({icon, items, onSelectedItem, placeholder, selectedItem}) {

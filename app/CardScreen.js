@@ -1,6 +1,6 @@
 import React from "react";
 import { View, SafeAreaView, StyleSheet, Image} from "react-native";
-import Card from "../components/Card"
+import Card from "../components/list/Card"
 
 
 export default function ImageView(){

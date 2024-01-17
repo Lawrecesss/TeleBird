@@ -1,7 +1,7 @@
 import React from 'react';
 import { SafeAreaView, Text, Image, StyleSheet, FlatList} from 'react-native';
-import Screen from '../components/BackgroundScreen';
-import Card from '../components/Card';
+import Screen from '../components/screens/BackgroundScreen';
+import Card from '../components/list/Card';
 
 
 const listings = [

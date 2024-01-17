@@ -8,12 +8,12 @@ import ViewImage from './app/ViewImage.js';
 import MessageScreen from './app/MessageScreen.js';
 import AccountScreen from "./app/AccountScreen.js"
 import Icon from './components/Icon.js';
-import AppTextInput from './components/AppTextInput.js';
-import Screen from './components/BackgroundScreen.js';
+import AppTextInput from './components/forms/AppTextInput.js';
+import Screen from './components/screens/BackgroundScreen.js';
 import {Picker} from "@react-native-picker/picker"
 import {React, useState} from 'react';
 import DropdownPicker from "react-native-dropdown-picker"
-import AppPicker from './components/AppPicker.js';
+import AppPicker from './components/pickers/AppPicker.js';
 import LogInScreen from './app/LogInScreen.js';
 import SignUpScreen from "./app/SignUpScreen.js"
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text} from 'react-native';
-import defaultStyles from "../configs/styles"
+import defaultStyles from "../../configs/styles"
 
 
 function ErrorMessageText({error, visible}) {

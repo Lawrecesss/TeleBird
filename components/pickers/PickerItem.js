@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text, TouchableOpacity, StyleSheet } from 'react-native';
-import defaultStyles from "../configs/styles"
+import defaultStyles from "../../configs/styles"
 
 
 function PickerItem({label, onPress}) {

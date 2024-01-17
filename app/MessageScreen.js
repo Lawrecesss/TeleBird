@@ -1,9 +1,9 @@
 import React, {useState} from 'react';
 import { SafeAreaView, FlatList, View} from 'react-native';
-import ListItem from '../components/ListItem';
-import ListItemSeparator from '../components/ListItemSeparator';
-import ListItemDeleteAction from '../components/ListItemDeleteAction';
-import Screen from '../components/BackgroundScreen';
+import ListItem from '../components/list/ListItem';
+import ListItemSeparator from '../components/list/ListItemSeparator';
+import ListItemDeleteAction from '../components/list/ListItemDeleteAction';
+import Screen from '../components/screens/BackgroundScreen';
 
 const initialMessages = [
     {

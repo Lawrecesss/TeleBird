@@ -1,10 +1,10 @@
 import React from 'react';
 import { StyleSheet} from 'react-native';
-import BackgroundScreen from '../components/BackgroundScreen';
-import {Formik} from "formik"
+import BackgroundScreen from '../components/screens/BackgroundScreen';
 import * as Yup from "yup"
-import AppFormField from '../components/AppFormField';
-import SubmitButton from '../components/SubmitButton';
+import AppFormField from '../components/forms/AppFormField';
+import SubmitButton from '../components/forms/SubmitButton';
+import { Formik } from 'formik';
 
 const validationSchema = Yup.object({
     username: Yup.string().required().label("Username"),
@@ -13,34 +13,31 @@ const validationSchema = Yup.object({
 function LogInScreen(props) {
     return (
         <BackgroundScreen style={styles.container} source={require("../assets/bg.png")}>
-            <Formik 
+            <Formik
             initialValues={{username:"", password:""}}
             onSubmit={(values)=> console.log(values)}
             validationSchema={validationSchema}
             >
-                {()=>(
-                        <>
-                        <AppFormField
-                        style={styles.input}
-                        name={"username"}
-                        autoCapitalize = "none"
-                        autoCorrect={false}
-                        icon={"account"}
-                        placeholder="Username"/>
-            
-                        <AppFormField
-                        style={styles.input}
-                        secureTextEntry
-                        name={"password"}
-                        textContentType="password"
-                        autoCapitalize = "none"
-                        autoCorrect={false}
-                        icon={"lock"}
-                        placeholder="Password" />
-                        <SubmitButton style={styles.btn} title={"Log In"}/>
-                        </>
-                )}
-            
+                <>
+                <AppFormField
+                style={styles.input}
+                name={"username"}
+                autoCapitalize = "none"
+                autoCorrect={false}
+                icon={"account"}
+                placeholder="Username"/>
+    
+                <AppFormField
+                style={styles.input}
+                secureTextEntry
+                name={"password"}
+                textContentType="password"
+                autoCapitalize = "none"
+                autoCorrect={false}
+                icon={"lock"}
+                placeholder="Password" />
+                <SubmitButton style={styles.btn} title={"Log In"}/> 
+                </>
             </Formik>
         </BackgroundScreen>
     );

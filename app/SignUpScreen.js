@@ -1,8 +1,8 @@
 import React from 'react';
-import AppTextInput from '../components/AppTextInput';
+import AppTextInput from '../components/forms/AppTextInput';
 import AppButton from '../components/AppButton';
 import { StyleSheet } from 'react-native';
-import BackgroundScreen from '../components/BackgroundScreen';
+import BackgroundScreen from '../components/screens/BackgroundScreen';
 function SignUpScreen(props) {
     return (
         <BackgroundScreen style={styles.container} source={require("../assets/bg.png")}>
