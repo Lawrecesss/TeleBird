@@ -15,17 +15,12 @@ import {React, useState} from 'react';
 import DropdownPicker from "react-native-dropdown-picker"
 import AppPicker from './components/AppPicker.js';
 import LogInScreen from './app/LogInScreen.js';
+import SignUpScreen from "./app/SignUpScreen.js"
 
-const categories = [
-  {label:"clothing", value:1},
-  {label:"phone", value:2},
-  {label:"beer", value:3},
-]
+
 export default function App() {
-  const [category, setCategory] = useState()
   return (
     <LogInScreen/>
-    
   )
 }
 
