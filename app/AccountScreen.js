@@ -7,16 +7,9 @@ import ListItemSeparator from "../components/list/ListItemSeparator";
 
 const menuItem = [
   {
-    title: "Update Username",
+    title: "Update Profile",
     icon: {
-      name: "account-edit",
-      backgroundColor: "blue",
-    },
-  },
-  {
-    title: "Update Profile Picture",
-    icon: {
-      name: "image-edit",
+      name: "account",
       backgroundColor: "green",
     },
   },

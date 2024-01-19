@@ -6,7 +6,7 @@ import { AppFormField, SubmitButton } from "../components/forms";
 import { Formik } from "formik";
 
 const validationSchema = Yup.object({
-  username: Yup.string().required().label("Username"),
+  username: Yup.string().required().min(4).label("Username"),
   password: Yup.string().required().min(8).label("Password"),
 });
 function LogInScreen(props) {

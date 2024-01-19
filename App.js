@@ -28,7 +28,9 @@ import AppPicker from "./components/pickers/AppPicker.js";
 import LogInScreen from "./app/LogInScreen.js";
 import SignUpScreen from "./app/SignUpScreen.js";
 import ChangeProfileScreen from "./app/ChangeProfileScreen.js";
+import CancelNDone from "./components/CancelNDone.js";
+import { LOCATION_BACKGROUND } from "expo-permissions";
 
 export default function App() {
-  return <LogInScreen />;
+  return <ChangeProfileScreen />;
 }

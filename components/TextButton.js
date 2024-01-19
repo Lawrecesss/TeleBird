@@ -1,12 +1,12 @@
 import React from "react";
 import { Text, TouchableOpacity, StyleSheet } from "react-native";
 
-function AppButton({
+function TextButton({
   title,
   onPress,
   backgroundColor = "black",
   style,
-  textColor = "white",
+  textColor,
 }) {
   return (
     <TouchableOpacity
@@ -21,15 +21,14 @@ const styles = StyleSheet.create({
   btn: {
     marginBottom: 10,
     width: "100%",
-    height: 70,
     borderRadius: 50,
     alignItems: "center",
     justifyContent: "center",
   },
   btnText: {
-    fontSize: 20,
+    fontSize: 18,
     color: "white",
     fontWeight: "bold",
   },
 });
-export default AppButton;
+export default TextButton;
