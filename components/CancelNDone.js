@@ -2,7 +2,7 @@ import React from "react";
 import { View, StyleSheet } from "react-native";
 import TextButton from "./TextButton";
 
-function CancelNDone(props) {
+function CancelNDone({ cancel, save }) {
   return (
     <View style={styles.screen}>
       <TextButton
@@ -10,12 +10,14 @@ function CancelNDone(props) {
         backgroundColor="white"
         textColor={"black"}
         title="Cancel"
+        onPress={cancel}
       />
       <TextButton
         style={[styles.btn, styles.done]}
         backgroundColor="white"
         textColor={"black"}
         title="Save"
+        onPress={save}
       />
     </View>
   );
