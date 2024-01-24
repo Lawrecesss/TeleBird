@@ -1,36 +1,104 @@
-import { StatusBar } from "expo-status-bar";
-import {
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  SafeAreaView,
-  ImageBackground,
-  Settings,
-} from "react-native";
-import {
-  useDimensions,
-  useDeviceOrientation,
-} from "@react-native-community/hooks";
-import Welcome from "./app/Welcome.js";
-import CardScreen from "./app/CardScreen.js";
-import ListingDetailScreen from "./app/ListingDetailScreen.js";
-import ViewImage from "./app/ViewImage.js";
-import MessageScreen from "./app/MessageScreen.js";
-import AccountScreen from "./app/AccountScreen.js";
-import Icon from "./components/Icon.js";
-import AppTextInput from "./components/forms/AppTextInput.js";
-import Screen from "./components/screens/BackgroundScreen.js";
-import { Picker } from "@react-native-picker/picker";
-import { React, useState } from "react";
-import DropdownPicker from "react-native-dropdown-picker";
-import AppPicker from "./components/pickers/AppPicker.js";
+import React from "react";
 import LogInScreen from "./app/LogInScreen.js";
 import SignUpScreen from "./app/SignUpScreen.js";
-import ChangeProfileScreen from "./app/ChangeProfileScreen.js";
-import CancelNDone from "./components/CancelNDone.js";
-import { LOCATION_BACKGROUND } from "expo-permissions";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
+import AccountScreen from "./app/AccountScreen.js";
+import ChangeProfileScreen from "./app/ChangeProfileScreen.js";
+import ChatScreen from "./app/ChatScreen.js";
+import FriendScreen from "./app/FriendScreen.js";
+import ChannelScreen from "./app/ChannelScreen.js";
+import SetProfileScreen from "./app/SetProfileScreen.js";
+import { Provider } from "react-redux";
+import Store from "./contexts/Store.js";
+import SplashScreen from "./app/SplashScreen.js";
+import BottomIcon from "./components/BottomIcon.js";
+import InChatScreen from "./app/InChatScreen.js";
+
+const NStack = createNativeStackNavigator();
+const BStack = createBottomTabNavigator();
+
+function HomeStack() {
+  return (
+    <BStack.Navigator
+      initialRouteName="Chats"
+      screenOptions={{
+        headerShown: false,
+        tabBarActiveTintColor: "dodgerblue",
+      }}
+    >
+      <BStack.Screen
+        name="Chats"
+        component={ChatScreen}
+        options={{
+          tabBarIcon: ({ color }) => <BottomIcon name={"chat"} color={color} />,
+        }}
+      />
+      <BStack.Screen
+        name="Channels"
+        component={ChannelScreen}
+        options={{
+          tabBarIcon: ({ color }) => (
+            <BottomIcon name={"account-group"} color={color} />
+          ),
+        }}
+      />
+      <BStack.Screen
+        name="Friends"
+        component={FriendScreen}
+        options={{
+          tabBarIcon: ({ color }) => (
+            <BottomIcon name={"account-multiple-plus"} color={color} />
+          ),
+        }}
+      />
+      <BStack.Screen
+        name="Settings"
+        component={AccountScreen}
+        options={{
+          tabBarIcon: ({ color }) => <BottomIcon name={"cog"} color={color} />,
+        }}
+      />
+    </BStack.Navigator>
+  );
+}
+
+function Stacks() {
+  return (
+    <NStack.Navigator screenOptions={{ headerShown: false }}>
+      <NStack.Screen name="SlpashScreen" component={SplashScreen} />
+      <NStack.Screen name="LogInScreen" component={LogInScreen} />
+      <NStack.Screen name="SignUpScreen" component={SignUpScreen} />
+      <NStack.Screen
+        name="ChangeProfileScreen"
+        component={ChangeProfileScreen}
+      />
+      <NStack.Screen
+        name="SetProfileScreen"
+        component={SetProfileScreen}
+        initialParams={{ id: "" }}
+      />
+      <NStack.Screen name="Home" component={HomeStack} />
+      <NStack.Screen
+        name="InChatScreen"
+        component={InChatScreen}
+        initialParams={{ profile: "", name: "" }}
+      />
+    </NStack.Navigator>
+  );
+}
+
+function RootNavigator() {
+  return (
+    <NavigationContainer>
+      <Provider store={Store}>
+        <Stacks />
+      </Provider>
+    </NavigationContainer>
+  );
+}
 export default function App() {
-  return <ChangeProfileScreen />;
+  return <RootNavigator />;
 }

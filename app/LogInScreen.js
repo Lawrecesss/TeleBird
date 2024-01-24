@@ -1,49 +1,87 @@
 import React from "react";
-import { Pressable, StyleSheet, Text } from "react-native";
+import { TouchableOpacity, StyleSheet, Text, Alert, View } from "react-native";
 import BackgroundScreen from "../components/screens/BackgroundScreen";
 import * as Yup from "yup";
 import { AppFormField, SubmitButton } from "../components/forms";
 import { Formik } from "formik";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth, database } from "../configs/firebase";
+import { useDispatch } from "react-redux";
+import { SET_USER } from "../contexts/actions/UserAction";
+import { doc, getDoc } from "firebase/firestore";
 
 const validationSchema = Yup.object({
-  username: Yup.string().required().min(4).label("Username"),
+  email: Yup.string().required().email().label("Email"),
   password: Yup.string().required().min(8).label("Password"),
 });
-function LogInScreen(props) {
+function LogInScreen({ navigation }) {
+  const dispatch = useDispatch();
   return (
     <BackgroundScreen
       style={styles.container}
       source={require("../assets/bg.png")}
     >
       <Formik
-        initialValues={{ username: "", password: "" }}
-        onSubmit={(values) => console.log(values)}
+        initialValues={{ email: "", password: "" }}
+        onSubmit={async (values) => {
+          if (values !== "") {
+            await signInWithEmailAndPassword(
+              auth,
+              values.email,
+              values.password
+            )
+              .then((userCred) => {
+                if (userCred) {
+                  getDoc(doc(database, "users", userCred?.user.uid)).then(
+                    (docSnap) => {
+                      if (docSnap.exists()) {
+                        dispatch(SET_USER(docSnap.data()));
+                        console.log("Logged In sucessfully"),
+                          navigation.replace("Home");
+                      }
+                    }
+                  );
+                }
+              })
+              .catch(() =>
+                Alert.alert("Error!", "Incorrect email address or password.")
+              );
+          }
+        }}
         validationSchema={validationSchema}
       >
         <>
           <AppFormField
             style={styles.input}
-            name={"username"}
+            name={"email"}
             autoCapitalize="none"
             autoCorrect={false}
-            icon={"account"}
-            placeholder="Username"
+            textContentType="emailAddress"
+            icon={"email"}
+            placeholder="Email"
           />
 
           <AppFormField
             style={styles.input}
-            secureTextEntry
             name={"password"}
             textContentType="password"
             autoCapitalize="none"
             autoCorrect={false}
             icon={"lock"}
+            isPass={"true"}
             placeholder="Password"
           />
           <SubmitButton style={styles.btn} title={"Log In"} />
-          <Pressable>
-            <Text style={styles.signUp}>Don't you have account? Sign up</Text>
-          </Pressable>
+          <View
+            style={{ flexDirection: "row", alignSelf: "center", marginTop: 10 }}
+          >
+            <Text style={{ fontSize: 18 }}>Don't you have an account? </Text>
+            <TouchableOpacity
+              onPress={() => navigation.navigate("SignUpScreen")}
+            >
+              <Text style={styles.signUp}>Sign up</Text>
+            </TouchableOpacity>
+          </View>
         </>
       </Formik>
     </BackgroundScreen>
@@ -52,17 +90,20 @@ function LogInScreen(props) {
 const styles = StyleSheet.create({
   container: {
     marginTop: 300,
-    alignItems: "center",
   },
   btn: {
+    alignSelf: "center",
     marginTop: 10,
-    width: 150,
     height: 70,
   },
   input: {
-    width: "70%",
+    alignSelf: "center",
     backgroundColor: "white",
   },
-  signUp: {},
+  signUp: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "white",
+  },
 });
 export default LogInScreen;

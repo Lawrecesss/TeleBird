@@ -6,12 +6,15 @@ import { AppFormField } from "../components/forms";
 import { Formik } from "formik";
 import CancelNDone from "../components/buttons/CancelNDone";
 import * as Yup from "yup";
+import { doc, updateDoc } from "firebase/firestore";
+import { database } from "../configs/firebase";
 
 const validationSchema = Yup.object({
   username: Yup.string().required().min(4).label("Username"),
 });
 
-function ChangeProfileScreen({ navigation }) {
+function SetProfileScreen({ route, navigation }) {
+  const { id } = route.params;
   const [
     imageUri = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
     setImageUri,
@@ -39,12 +42,19 @@ function ChangeProfileScreen({ navigation }) {
     <Screen style={styles.screen}>
       <Formik
         initialValues={{ username: "" }}
-        onSubmit={(values) => console.log(values)}
+        onSubmit={(values) => (
+          console.log("Signed Up sucessfully"),
+          updateDoc(doc(database, "users", id), {
+            username: values.username,
+            profilePic: imageUri,
+          }),
+          navigation.navigate("ChatScreen")
+        )}
         validationSchema={validationSchema}
       >
         {({ handleSubmit }) => (
           <>
-            <CancelNDone navigation={navigation} done={handleSubmit} cancel />
+            <CancelNDone done={handleSubmit} />
             <Image
               source={{
                 uri: imageUri,
@@ -60,10 +70,6 @@ function ChangeProfileScreen({ navigation }) {
               icon={"account"}
               placeholder="Username"
             />
-
-            <Text style={styles.text}>
-              You can only change your name and username onace a week.
-            </Text>
           </>
         )}
       </Formik>
@@ -93,4 +99,4 @@ const styles = StyleSheet.create({
     color: "black",
   },
 });
-export default ChangeProfileScreen;
+export default SetProfileScreen;

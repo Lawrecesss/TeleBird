@@ -4,40 +4,39 @@ import Screen from "../components/screens/BackgroundScreen";
 import Icon from "../components/Icon";
 import ListItem from "../components/list/ListItem";
 import ListItemSeparator from "../components/list/ListItemSeparator";
+import { auth } from "../configs/firebase";
+import { signOut } from "firebase/auth";
 
-const menuItem = [
-  {
-    title: "Update Profile",
-    icon: {
-      name: "account",
-      backgroundColor: "green",
+function AccountScreen({ navigation }) {
+  const menuItem = [
+    {
+      title: "Update Profile",
+      icon: {
+        name: "account",
+      },
+      onPress: () => navigation.navigate("ChangeProfileScreen"),
     },
-  },
-  {
-    title: "Theme",
-    icon: {
-      name: "theme-light-dark",
-      backgroundColor: "brown",
+    {
+      title: "Theme",
+      icon: {
+        name: "theme-light-dark",
+      },
     },
-  },
-  {
-    title: "Default Language",
-    icon: {
-      name: "translate",
-      backgroundColor: "orange",
+    {
+      title: "Default Language",
+      icon: {
+        name: "translate",
+      },
     },
-  },
-  {
-    title: "Privacy",
-    icon: {
-      name: "security",
-      backgroundColor: "black",
+    {
+      title: "Security",
+      icon: {
+        name: "security",
+      },
     },
-  },
-];
-function AccountScreen(props) {
+  ];
   return (
-    <Screen style={{ backgroundColor: "#38B6FF", flex: 1 }}>
+    <Screen style={{ backgroundColor: "lightgrey", flex: 1 }}>
       <View style={styles.profileContainer}>
         <ListItem
           style={{ backgroundColor: "white" }}
@@ -50,19 +49,16 @@ function AccountScreen(props) {
       </View>
       <View style={styles.itemContainer}>
         <FlatList
+          scrollEnabled="false"
           data={menuItem}
           keyExtractor={(menuItem) => menuItem.title}
           renderItem={({ item }) => (
             <ListItem
               style={{ backgroundColor: "white" }}
               title={item.title}
+              onPress={item.onPress}
               IconComponent={
-                <Icon
-                  name={item.icon.name}
-                  backgroundColor={item.icon.backgroundColor}
-                  size={40}
-                  color={"white"}
-                />
+                <Icon name={item.icon.name} size={50} color={"black"} />
               }
               Switch={item.switch}
             />
@@ -74,14 +70,15 @@ function AccountScreen(props) {
         <ListItem
           style={{ backgroundColor: "white" }}
           title={"Log Out"}
-          IconComponent={
-            <Icon
-              name={"logout"}
-              backgroundColor={"red"}
-              color={"white"}
-              size={40}
-            />
-          }
+          IconComponent={<Icon name={"logout"} color={"black"} size={50} />}
+          onPress={() => {
+            signOut(auth).then(
+              () => (
+                console.log("Logged Out sucessfully"),
+                navigation.replace("LogInScreen")
+              )
+            );
+          }}
         />
       </View>
     </Screen>
