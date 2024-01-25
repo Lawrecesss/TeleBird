@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   View,
   StyleSheet,
@@ -8,97 +8,35 @@ import {
   ScrollView,
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  orderBy,
+  query,
+} from "firebase/firestore";
+import { database } from "../../configs/firebase";
 
-function ChatBody() {
+function ChatBody({ user, chat }) {
   const flatListRef = useRef();
+  const chatRef = doc(database, "chats", chat);
+  const messageCollection = collection(chatRef, "messages");
+  const orderedMessages = query(
+    messageCollection,
+    orderBy("timestamp", "desc")
+  );
+  const messages = [];
+  const GetMessages = async () => {
+    (await getDocs(orderedMessages)).forEach((doc) => {
+      messages.push(doc.data());
+    });
+  };
 
-  const messages = [
-    {
-      messageId: 1,
-      user: "1",
-      message: "hello",
-      time: "9:30 AM",
-      seen: "true",
-    },
-    {
-      messageId: 2,
-      user: "2",
-      message: "hello",
-      time: "9 AM",
-      seen: "true",
-    },
-    {
-      messageId: 3,
-      user: "1",
-      message: "When will you come?",
-      time: "9 AM",
-      seen: "false",
-    },
-    {
-      messageId: 4,
-      user: "1",
-      message: "hello",
-      time: "9:30 AM",
-      seen: "true",
-    },
-    {
-      messageId: 5,
-      user: "2",
-      message: "hello",
-      time: "9 AM",
-      seen: "true",
-    },
-    {
-      messageId: 6,
-      user: "1",
-      message: "When will you come?",
-      time: "9 AM",
-      seen: "false",
-    },
-    {
-      messageId: 7,
-      user: "1",
-      message: "hello",
-      time: "9:30 AM",
-      seen: "true",
-    },
-    {
-      messageId: 8,
-      user: "2",
-      message: "hello",
-      time: "9 AM",
-      seen: "true",
-    },
-    {
-      messageId: 9,
-      user: "1",
-      message: "When will you come?",
-      time: "9 AM",
-      seen: "false",
-    },
-    {
-      messageId: 10,
-      user: "1",
-      message:
-        "The most basic use case is to plop down a TextInput and subscribe to the onChangeText events to read the user input. There are also other events, such as onSubmitEditing and onFocus that can be subscribed to. A minimal example:",
-      time: "9:30 AM",
-      seen: "true",
-    },
-    {
-      messageId: 11,
-      user: "2",
-      message: "hello",
-      time: "9 AM",
-      seen: "true",
-    },
-    {
-      messageId: 12,
-      user: "1",
-      message: "When will you come?",
-      time: "9 AM",
-      seen: "false",
-    },
-  ];
+  useEffect(() => {
+    GetMessages();
+  }, []);
+
   const EndComponent = ({ time, seen }) => {
     return (
       <View style={styles.timeContainer}>
@@ -153,13 +91,13 @@ function ChatBody() {
       </View>
     );
   };
-  const Message = ({ userId, message, time, seen }) => {
+  const Message = ({ senderId, message, time, seen }) => {
     return (
       <View>
-        {userId === "1" && (
+        {senderId === user && (
           <UserMessage message={message} time={time} seen={seen} />
         )}
-        {userId === "2" && (
+        {senderId !== user && (
           <AnotherUserMessage message={message} time={time} seen={seen} />
         )}
       </View>
@@ -179,12 +117,11 @@ function ChatBody() {
         <FlatList
           ref={flatListRef}
           data={messages}
-          keyExtractor={(messages) => messages.messageId}
           renderItem={({ item }) => (
             <Message
-              userId={item.user}
+              senderId={item.sender}
               message={item.message}
-              time={item.time}
+              time={item.time.toDate().toDateString()}
               seen={item.seen}
             />
           )}

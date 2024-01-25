@@ -5,10 +5,12 @@ import { StyleSheet, View, FlatList } from "react-native";
 import ListItem from "../components/list/ListItem";
 import ListItemSeparator from "../components/list/ListItemSeparator";
 import ListItemDeleteAction from "../components/list/ListItemDeleteAction";
-
 import Story from "../components/chatComponents/Story";
+import { useNavigation } from "@react-navigation/native";
 
-function ChatScreen({ navigation }) {
+function ChatScreen(props) {
+  const navigation = useNavigation();
+  const { id } = props.route.params;
   const messages = [
     {
       title: "Alex",
@@ -139,7 +141,12 @@ function ChatScreen({ navigation }) {
   ];
   return (
     <Screen>
-      <Headers name={"Chats"} btnTitle={"Edit"} rightBtnTitle={"pencil-plus"} />
+      <Headers
+        name={"Chats"}
+        btnTitle={"Edit"}
+        rightBtnTitle={"pencil-plus"}
+        rightOnPress={() => navigation.navigate("SearchFriend")}
+      />
       <View style={styles.itemContainer}>
         <FlatList
           data={messages}

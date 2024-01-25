@@ -20,7 +20,7 @@ function SplashScreen({ navigation }) {
           })
           .then(
             setTimeout(() => {
-              navigation.replace("Home");
+              navigation.replace("Home", { id: userCred.uid });
             }, 2000)
           );
       } else {

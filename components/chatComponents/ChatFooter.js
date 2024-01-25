@@ -2,12 +2,27 @@ import React, { useState } from "react";
 import { View, StyleSheet, TextInput } from "react-native";
 import IconButton from "../buttons/IconButton";
 import { AppTextInput } from "../forms";
+import {
+  serverTimestamp,
+  doc,
+  setDoc,
+  collection,
+  addDoc,
+} from "firebase/firestore";
+import { database } from "../../configs/firebase";
 
-function ChatFooter(props) {
+function ChatFooter({ user, chat }) {
   const [message, setMessage] = useState("");
   const [hide, setEnableHide] = useState(false);
-
-  const send = () => {
+  const messageData = {
+    message: message,
+    sender: user,
+    time: serverTimestamp(),
+  };
+  const chatDocRef = doc(database, "chats", chat);
+  const messageCollection = collection(chatDocRef, "messages");
+  const send = async () => {
+    await addDoc(messageCollection, messageData);
     setMessage(""), setEnableHide(false);
   };
 

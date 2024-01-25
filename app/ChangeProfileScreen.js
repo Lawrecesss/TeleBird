@@ -6,12 +6,17 @@ import { AppFormField } from "../components/forms";
 import { Formik } from "formik";
 import CancelNDone from "../components/buttons/CancelNDone";
 import * as Yup from "yup";
+import { updateDoc, doc } from "firebase/firestore";
+import { database } from "../configs/firebase";
+import { useNavigation } from "@react-navigation/native";
 
 const validationSchema = Yup.object({
   username: Yup.string().required().min(4).label("Username"),
 });
 
-function ChangeProfileScreen({ navigation }) {
+function ChangeProfileScreen(props) {
+  const navigation = useNavigation();
+  const { id } = props.route.params;
   const [
     imageUri = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
     setImageUri,
@@ -39,7 +44,14 @@ function ChangeProfileScreen({ navigation }) {
     <Screen style={styles.screen}>
       <Formik
         initialValues={{ username: "" }}
-        onSubmit={(values) => console.log(values)}
+        onSubmit={(values) => (
+          console.log("Changed sucessfully"),
+          updateDoc(doc(database, "users", id), {
+            username: values.username,
+            profilePic: imageUri,
+          }),
+          navigation.replace("Home", { id: id, screen: "Settings" })
+        )}
         validationSchema={validationSchema}
       >
         {({ handleSubmit }) => (

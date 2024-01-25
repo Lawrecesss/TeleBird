@@ -1,20 +1,41 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { View, StyleSheet, FlatList } from "react-native";
 import Screen from "../components/screens/BackgroundScreen";
 import Icon from "../components/Icon";
 import ListItem from "../components/list/ListItem";
 import ListItemSeparator from "../components/list/ListItemSeparator";
-import { auth } from "../configs/firebase";
+import { auth, database } from "../configs/firebase";
 import { signOut } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
+import { useNavigation } from "@react-navigation/native";
 
-function AccountScreen({ navigation }) {
+function AccountScreen(props) {
+  const navigation = useNavigation();
+  const { id } = props.route.params;
+  const [username, setUsername] = useState();
+  const [email, setEmail] = useState();
+  const [profile, setProfile] = useState();
+
+  const GetUserData = async () => {
+    getDoc(doc(database, "users", id)).then((docSnap) => {
+      if (docSnap.exists()) {
+        setUsername(docSnap.data().username);
+        setProfile(docSnap.data().profilePic);
+        setEmail(docSnap.data().providerData.email);
+      }
+    });
+  };
+  useEffect(() => {
+    GetUserData().catch((error) => console.log("Error! ", error));
+  }, []);
+
   const menuItem = [
     {
       title: "Update Profile",
       icon: {
         name: "account",
       },
-      onPress: () => navigation.navigate("ChangeProfileScreen"),
+      onPress: () => navigation.navigate("ChangeProfileScreen", { id: id }),
     },
     {
       title: "Theme",
@@ -40,11 +61,9 @@ function AccountScreen({ navigation }) {
       <View style={styles.profileContainer}>
         <ListItem
           style={{ backgroundColor: "white" }}
-          title={"Lawrence"}
-          subTitle={"lhshein14@gmail.com"}
-          image={
-            "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
-          }
+          title={username}
+          subTitle={email}
+          image={profile}
         />
       </View>
       <View style={styles.itemContainer}>

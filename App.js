@@ -16,11 +16,14 @@ import Store from "./contexts/Store.js";
 import SplashScreen from "./app/SplashScreen.js";
 import BottomIcon from "./components/BottomIcon.js";
 import InChatScreen from "./app/InChatScreen.js";
+import SearchFriend from "./app/SearchFriend.js";
 
 const NStack = createNativeStackNavigator();
 const BStack = createBottomTabNavigator();
 
-function HomeStack() {
+function HomeStack(props) {
+  const { id } = props.route.params;
+
   return (
     <BStack.Navigator
       initialRouteName="Chats"
@@ -32,6 +35,7 @@ function HomeStack() {
       <BStack.Screen
         name="Chats"
         component={ChatScreen}
+        initialParams={{ id: id }}
         options={{
           tabBarIcon: ({ color }) => <BottomIcon name={"chat"} color={color} />,
         }}
@@ -48,6 +52,7 @@ function HomeStack() {
       <BStack.Screen
         name="Friends"
         component={FriendScreen}
+        initialParams={{ id: id }}
         options={{
           tabBarIcon: ({ color }) => (
             <BottomIcon name={"account-multiple-plus"} color={color} />
@@ -57,6 +62,7 @@ function HomeStack() {
       <BStack.Screen
         name="Settings"
         component={AccountScreen}
+        initialParams={{ id: id }}
         options={{
           tabBarIcon: ({ color }) => <BottomIcon name={"cog"} color={color} />,
         }}
@@ -75,17 +81,18 @@ function Stacks() {
         name="ChangeProfileScreen"
         component={ChangeProfileScreen}
       />
+      <NStack.Screen name="SetProfileScreen" component={SetProfileScreen} />
       <NStack.Screen
-        name="SetProfileScreen"
-        component={SetProfileScreen}
+        name="Home"
+        component={HomeStack}
         initialParams={{ id: "" }}
       />
-      <NStack.Screen name="Home" component={HomeStack} />
       <NStack.Screen
         name="InChatScreen"
         component={InChatScreen}
-        initialParams={{ profile: "", name: "" }}
+        initialParams={{ user: "", friend: "", profile: "", name: "" }}
       />
+      <NStack.Screen name="SearchFriend" component={SearchFriend} />
     </NStack.Navigator>
   );
 }

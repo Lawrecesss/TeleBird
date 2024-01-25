@@ -1,11 +1,29 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Screen from "../components/screens/Screen";
 import ChatBody from "../components/chatComponents/ChatBody";
 import ChatHeader from "../components/chatComponents/ChatHeader";
 import ChatFooter from "../components/chatComponents/ChatFooter";
+import { useNavigation } from "@react-navigation/native";
+import { getDoc, doc, setDoc } from "firebase/firestore";
+import { database } from "../configs/firebase";
 
-function InChatScreen({ navigation, route }) {
-  const { profile, name, story, online } = route.params;
+function InChatScreen(props) {
+  const navigation = useNavigation();
+  const { user, friend, profile, name, online } = props.route.params;
+  const chatId = [user, friend].sort().join("_");
+  const members = [user, friend];
+  const GenerateChat = async () => {
+    await getDoc(doc(database, "chats", chatId)).then((docSnap) => {
+      if (docSnap.exists()) {
+        console.log("chat already created.");
+      } else {
+        setDoc(doc(database, "chats", chatId), { members });
+      }
+    });
+  };
+  useEffect(() => {
+    GenerateChat();
+  });
   return (
     <Screen>
       <ChatHeader
@@ -14,8 +32,8 @@ function InChatScreen({ navigation, route }) {
         name={name}
         online={online}
       />
-      <ChatBody />
-      <ChatFooter />
+      <ChatBody user={user} chat={chatId} />
+      <ChatFooter user={user} chat={chatId} />
     </Screen>
   );
 }

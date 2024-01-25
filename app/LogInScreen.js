@@ -37,7 +37,9 @@ function LogInScreen({ navigation }) {
                       if (docSnap.exists()) {
                         dispatch(SET_USER(docSnap.data()));
                         console.log("Logged In sucessfully"),
-                          navigation.replace("Home");
+                          navigation.replace("Home", {
+                            id: userCred.user.uid,
+                          });
                       }
                     }
                   );
