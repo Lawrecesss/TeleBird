@@ -3,21 +3,24 @@ import { View, StyleSheet, TextInput } from "react-native";
 import IconButton from "../buttons/IconButton";
 import { AppTextInput } from "../forms";
 import {
-  serverTimestamp,
   doc,
   setDoc,
   collection,
   addDoc,
+  Timestamp,
+  serverTimestamp,
+  FieldValue,
 } from "firebase/firestore";
 import { database } from "../../configs/firebase";
 
-function ChatFooter({ user, chat }) {
+function ChatFooter({ userId, chat, onPress }) {
   const [message, setMessage] = useState("");
   const [hide, setEnableHide] = useState(false);
+
   const messageData = {
     message: message,
-    sender: user,
-    time: serverTimestamp(),
+    sender: userId,
+    timestamp: serverTimestamp(),
   };
   const chatDocRef = doc(database, "chats", chat);
   const messageCollection = collection(chatDocRef, "messages");
@@ -57,7 +60,7 @@ function ChatFooter({ user, chat }) {
         style={styles.icon}
         name={"send"}
         size={30}
-        onPress={() => send()}
+        onPress={() => (onPress, send())}
       />
     </View>
   );

@@ -42,10 +42,11 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginRight: 10,
   },
+  eyeIcon: {},
   text: {
     color: "black",
     fontSize: 18,
-    width: 300,
+    width: "85%",
   },
 });
 

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Screen from "../components/screens/Screen";
 import Headers from "../components/Headers";
 import { StyleSheet, View, FlatList } from "react-native";
@@ -7,138 +7,67 @@ import ListItemSeparator from "../components/list/ListItemSeparator";
 import ListItemDeleteAction from "../components/list/ListItemDeleteAction";
 import Story from "../components/chatComponents/Story";
 import { useNavigation } from "@react-navigation/native";
+import {
+  collection,
+  query,
+  getDoc,
+  doc,
+  where,
+  getDocs,
+  onSnapshot,
+  orderBy,
+  limit,
+} from "firebase/firestore";
+import { database } from "../configs/firebase";
 
 function ChatScreen(props) {
   const navigation = useNavigation();
   const { id } = props.route.params;
-  const messages = [
-    {
-      title: "Alex",
-      subTitle: "Okey",
-      image:
-        "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
-      time: "9AM",
-      rightIcon: "true",
-      seen: "true",
-      online: "true",
-      story: "true",
-      onPress: () =>
-        navigation.navigate("InChatScreen", {
-          profile: messages[0].image,
-          name: messages[0].title,
-          story: messages[0].story,
-          online: messages[0].online,
-        }),
-    },
-    {
-      title: "David",
-      subTitle: "Nice, I will come tomorrow. Wait me at the foodcourt.",
-      image:
-        "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
-      time: "9AM",
-      seen: "false",
-      online: "false",
-      story: "true",
-      onPress: () =>
-        navigation.navigate("InChatScreen", {
-          profile: messages[1].image,
-          name: messages[1].title,
-          story: messages[0].story,
-          online: messages[1].online,
-        }),
-    },
-    {
-      title: "Mia",
-      subTitle: "Okey",
-      image:
-        "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
-      time: "9AM",
-      seen: "false",
-      online: "true",
-      onPress: () =>
-        navigation.navigate("InChatScreen", {
-          profile: messages[2].image,
-          name: messages[2].title,
-          online: messages[2].online,
-        }),
-    },
-    {
-      title: "Franco",
-      subTitle: "Okey",
-      image:
-        "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
-      time: "9AM",
-      seen: "true",
-      online: "true",
-      onPress: () =>
-        navigation.navigate("InChatScreen", {
-          profile: messages[3].image,
-          name: messages[3].title,
-          online: messages[3].online,
-        }),
-    },
-    {
-      title: "Qill",
-      subTitle: "Okey",
-      image:
-        "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
-      time: "9AM",
-      rightIcon: "true",
-      seen: "true",
-      online: "true",
-      onPress: () =>
-        navigation.navigate("InChatScreen", {
-          profile: messages[4].image,
-          name: messages[4].title,
-          online: messages[4].online,
-        }),
-    },
-    {
-      title: "Jack",
-      subTitle: "Okey",
-      image:
-        "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
-      time: "9AM",
-      seen: "false",
-      online: "true",
-      onPress: () =>
-        navigation.navigate("InChatScreen", {
-          profile: messages[5].image,
-          name: messages[5].title,
-          online: messages[5].online,
-        }),
-    },
-    {
-      title: "Pop",
-      subTitle: "Okey",
-      image:
-        "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
-      time: "9AM",
-      seen: "false",
-      online: "false",
-      onPress: () =>
-        navigation.navigate("InChatScreen", {
-          profile: messages[6].image,
-          name: messages[6].title,
-          online: messages[6].online,
-        }),
-    },
-    {
-      title: "Hugo",
-      subTitle: "Okey",
-      image:
-        "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
-      time: "9AM",
-      seen: "true",
-      online: "false",
-      onPress: () =>
-        navigation.navigate("InChatScreen", {
-          profile: messages[7].image,
-          name: messages[7].title,
-          online: messages[7].online,
-        }),
-    },
-  ];
+  const [chatList, setChatList] = useState();
+  const userRef = doc(database, "users", id);
+
+  const GetChats = async () => {
+    const chatRef = collection(database, "chats");
+    const allChatDoc = await getDocs(
+      query(chatRef, where("members", "array-contains", userRef))
+    );
+    const chatData = await Promise.all(
+      allChatDoc.docs.map(async (chatDoc) => {
+        const data = chatDoc.data();
+        const members = await Promise.all(
+          data.members
+            .filter((user) => {
+              return user.id != id;
+            })
+            .map(async (user) => {
+              const userDoc = await getDoc(user);
+              const userData = await userDoc.data();
+              const userID = userData._id;
+              const username = userData.username;
+              const profilePic = userData.profilePic;
+              return { userID, username, profilePic };
+            })
+        );
+        const messageRef = collection(chatDoc.ref, "messages");
+        const allMessages = await getDocs(
+          query(messageRef, orderBy("timestamp", "desc"), limit(1))
+        );
+        const lastMessage = allMessages?.docs?.length
+          ? allMessages.docs[0].data()
+          : {};
+        return {
+          lastMessage,
+          otherUser: members[0],
+        };
+      })
+    );
+
+    return chatData;
+  };
+
+  useEffect(() => {
+    GetChats().then((chatData) => setChatList(chatData));
+  }, [GetChats]);
   return (
     <Screen>
       <Headers
@@ -149,19 +78,31 @@ function ChatScreen(props) {
       />
       <View style={styles.itemContainer}>
         <FlatList
-          data={messages}
-          keyExtractor={(menuItem) => menuItem.title}
+          data={chatList}
           renderItem={({ item }) => (
             <ListItem
               style={{ backgroundColor: "white" }}
-              title={item.title}
-              subTitle={item.subTitle}
-              image={item.image}
-              time={item.time}
-              rightIcon={item.rightIcon}
-              seen={item.seen}
-              online={item.online}
-              onPress={item.onPress}
+              title={item.otherUser.username}
+              subTitle={item.lastMessage.message}
+              image={item.otherUser.profilePic}
+              time={item.lastMessage.timestamp
+                ?.toDate()
+                .toLocaleDateString([], {
+                  day: "numeric",
+                  month: "short",
+                  year: "numeric",
+                })}
+              // rightIcon={item.rightIcon}
+              // seen={item.seen}
+              // online={item.online}
+              onPress={() =>
+                navigation.navigate("InChatScreen", {
+                  user: id,
+                  friend: item.otherUser.userID,
+                  profile: item.otherUser.profilePic,
+                  name: item.otherUser.username,
+                })
+              }
               renderRightActions={() => <ListItemDeleteAction />}
             />
           )}

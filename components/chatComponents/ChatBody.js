@@ -1,38 +1,39 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import {
   View,
   StyleSheet,
   Text,
   FlatList,
   TouchableOpacity,
-  ScrollView,
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import {
   collection,
   doc,
-  getDoc,
   getDocs,
+  onSnapshot,
   orderBy,
   query,
 } from "firebase/firestore";
 import { database } from "../../configs/firebase";
+import ChatFooter from "./ChatFooter";
 
 function ChatBody({ user, chat }) {
   const flatListRef = useRef();
   const chatRef = doc(database, "chats", chat);
   const messageCollection = collection(chatRef, "messages");
-  const orderedMessages = query(
-    messageCollection,
-    orderBy("timestamp", "desc")
-  );
-  const messages = [];
+  const orderedMessages = query(messageCollection, orderBy("timestamp"));
+  const [messages, setMessages] = useState([]);
+
   const GetMessages = async () => {
-    (await getDocs(orderedMessages)).forEach((doc) => {
-      messages.push(doc.data());
+    onSnapshot(orderedMessages, async (snapShot) => {
+      const allMessages = snapShot.docs.map((doc) => {
+        console.log(doc.data());
+        return doc.data();
+      });
+      setMessages([allMessages]);
     });
   };
-
   useEffect(() => {
     GetMessages();
   }, []);
@@ -116,12 +117,14 @@ function ChatBody({ user, chat }) {
       <View style={styles.container}>
         <FlatList
           ref={flatListRef}
-          data={messages}
+          data={messages[0]}
           renderItem={({ item }) => (
             <Message
               senderId={item.sender}
               message={item.message}
-              time={item.time.toDate().toDateString()}
+              time={item.timestamp
+                ?.toDate()
+                .toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
               seen={item.seen}
             />
           )}

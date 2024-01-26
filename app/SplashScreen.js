@@ -11,7 +11,7 @@ function SplashScreen({ navigation }) {
 
   const checkLoggedUser = () => {
     onAuthStateChanged(auth, (userCred) => {
-      if (userCred.uid) {
+      if (userCred) {
         getDoc(doc(database, "users", userCred.uid))
           .then((docSnap) => {
             if (docSnap.exists()) {

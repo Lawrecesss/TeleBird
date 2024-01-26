@@ -11,7 +11,10 @@ function InChatScreen(props) {
   const navigation = useNavigation();
   const { user, friend, profile, name, online } = props.route.params;
   const chatId = [user, friend].sort().join("_");
-  const members = [user, friend];
+  const members = [
+    doc(database, "users", user),
+    doc(database, "users", friend),
+  ];
   const GenerateChat = async () => {
     await getDoc(doc(database, "chats", chatId)).then((docSnap) => {
       if (docSnap.exists()) {
@@ -23,7 +26,7 @@ function InChatScreen(props) {
   };
   useEffect(() => {
     GenerateChat();
-  });
+  }, []);
   return (
     <Screen>
       <ChatHeader
@@ -33,7 +36,7 @@ function InChatScreen(props) {
         online={online}
       />
       <ChatBody user={user} chat={chatId} />
-      <ChatFooter user={user} chat={chatId} />
+      <ChatFooter userId={user} chat={chatId} />
     </Screen>
   );
 }
