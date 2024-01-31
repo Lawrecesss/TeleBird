@@ -6,6 +6,7 @@ import {
   StyleSheet,
   TouchableHighlight,
   Switch,
+  TouchableOpacity,
 } from "react-native";
 import {
   Swipeable,
@@ -25,6 +26,8 @@ function ListItem({
   seen,
   online,
   story,
+  friendRequest,
+  friendRequestOnPress,
 }) {
   return (
     <GestureHandlerRootView>
@@ -80,6 +83,14 @@ function ListItem({
                 )}
               </View>
             )}
+            {friendRequest && (
+              <TouchableOpacity
+                style={styles.friendRequest}
+                onPress={friendRequestOnPress}
+              >
+                <Text style={styles.text}>Add Friend</Text>
+              </TouchableOpacity>
+            )}
           </View>
         </TouchableHighlight>
       </Swipeable>
@@ -127,6 +138,20 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 70,
     right: 340,
+  },
+  friendRequest: {
+    alignSelf: "center",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "green",
+    width: "30%",
+    height: 40,
+    marginLeft: "auto",
+    borderRadius: 20,
+  },
+  text: {
+    color: "white",
+    fontWeight: "bold",
   },
 });
 

@@ -14,9 +14,11 @@ export default {
     },
     assetBundlePatterns: ["**/*"],
     ios: {
+      bundleIdentifier: "com.lxwrxxce.TeleBird",
       supportsTablet: true,
     },
     android: {
+      package: "com.lxwrxxce.TeleBird",
       adaptiveIcon: {
         foregroundImage: "./assets/adaptive-icon.png",
         backgroundColor: "#ffffff",

@@ -19,6 +19,7 @@ import {
   limit,
 } from "firebase/firestore";
 import { database } from "../configs/firebase";
+import SearchBar from "../components/SearchBar";
 
 function ChatScreen(props) {
   const navigation = useNavigation();
@@ -31,6 +32,7 @@ function ChatScreen(props) {
     const allChatDoc = await getDocs(
       query(chatRef, where("members", "array-contains", userRef))
     );
+
     const chatData = await Promise.all(
       allChatDoc.docs.map(async (chatDoc) => {
         const data = chatDoc.data();
@@ -67,7 +69,7 @@ function ChatScreen(props) {
 
   useEffect(() => {
     GetChats().then((chatData) => setChatList(chatData));
-  }, [GetChats]);
+  }, []);
   return (
     <Screen>
       <Headers
@@ -76,6 +78,7 @@ function ChatScreen(props) {
         rightBtnTitle={"pencil-plus"}
         rightOnPress={() => navigation.navigate("SearchFriend")}
       />
+
       <View style={styles.itemContainer}>
         <FlatList
           data={chatList}

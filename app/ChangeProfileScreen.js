@@ -33,6 +33,7 @@ function ChangeProfileScreen(props) {
     try {
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
       });
       if (!result.canceled) setImageUri(result.assets[0].uri);
     } catch (error) {

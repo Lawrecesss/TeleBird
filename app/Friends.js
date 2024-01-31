@@ -3,6 +3,7 @@ import { View, FlatList, Text, StyleSheet } from "react-native";
 import ListItem from "../components/list/ListItem";
 import ListItemSeparator from "../components/list/ListItemSeparator";
 import { useNavigation } from "@react-navigation/native";
+import SearchBar from "../components/SearchBar";
 
 function Friends(props) {
   const { user, friendData } = props.route.params;

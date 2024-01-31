@@ -1,34 +1,38 @@
 import React, { useRef, useState, useEffect } from "react";
+import { Video } from "expo-av";
 import {
   View,
   StyleSheet,
   Text,
   FlatList,
-  TouchableOpacity,
+  Image,
+  Dimensions,
+  Pressable,
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import {
   collection,
   doc,
-  getDocs,
   onSnapshot,
   orderBy,
   query,
 } from "firebase/firestore";
 import { database } from "../../configs/firebase";
-import ChatFooter from "./ChatFooter";
+
+const { width } = Dimensions.get("window");
 
 function ChatBody({ user, chat }) {
   const flatListRef = useRef();
   const chatRef = doc(database, "chats", chat);
   const messageCollection = collection(chatRef, "messages");
-  const orderedMessages = query(messageCollection, orderBy("timestamp"));
+  const orderedMessages = query(
+    messageCollection,
+    orderBy("timestamp", "desc")
+  );
   const [messages, setMessages] = useState([]);
-
   const GetMessages = async () => {
     onSnapshot(orderedMessages, async (snapShot) => {
       const allMessages = snapShot.docs.map((doc) => {
-        console.log(doc.data());
         return doc.data();
       });
       setMessages([allMessages]);
@@ -64,51 +68,106 @@ function ChatBody({ user, chat }) {
       </View>
     );
   };
-  const UserMessage = ({ message, time, seen }) => {
+  const UserMessage = ({ message, mediaFile, mediaType, time, seen }) => {
     return (
       <View>
         <View style={[styles.userMessage]}>
-          <View style={styles.userInner}>
-            <Text numberOfLines={1000} style={[styles.text]}>
-              {message}
-            </Text>
+          <View style={[styles.userInner]}>
+            {mediaType === "image" && mediaFile !== null && (
+              <Image
+                style={styles.image}
+                source={{
+                  uri: mediaFile,
+                }}
+                resizeMode="cover"
+              />
+            )}
+            {mediaType === "video" && mediaFile !== null && (
+              <Video
+                style={styles.video}
+                source={{
+                  uri: mediaFile,
+                }}
+                rate={1.0}
+                volume={1.0}
+                isMuted={false}
+                resizeMode="cover"
+                shouldPlay
+                useNativeControls
+              />
+            )}
+            {message !== null && (
+              <Text numberOfLines={1000} style={[styles.text]}>
+                {message}
+              </Text>
+            )}
             <EndComponent time={time} seen={seen} />
           </View>
         </View>
       </View>
     );
   };
-  const AnotherUserMessage = ({ message, time }) => {
+  const AnotherUserMessage = ({ message, mediaType, mediaFile, time }) => {
     return (
       <View>
         <View style={[styles.anotherUserMessage]}>
           <View style={styles.anotherUserInner}>
-            <Text numberOfLines={100} style={styles.text}>
-              {message}
-            </Text>
+            {mediaType === "image" && mediaFile !== null && (
+              <Image
+                style={styles.image}
+                source={{
+                  uri: mediaFile,
+                }}
+                resizeMode="cover"
+              />
+            )}
+            {mediaType === "video" && mediaFile !== null && (
+              <Video
+                style={styles.video}
+                source={{
+                  uri: mediaFile,
+                }}
+                rate={1.0}
+                volume={1.0}
+                isMuted={false}
+                resizeMode="cover"
+                shouldPlay
+                useNativeControls
+              />
+            )}
+            {message !== null && (
+              <Text numberOfLines={1000} style={styles.text}>
+                {message}
+              </Text>
+            )}
             <EndComponent time={time} />
           </View>
         </View>
       </View>
     );
   };
-  const Message = ({ senderId, message, time, seen }) => {
+  const Message = ({ senderId, message, mediaType, time, mediaFile, seen }) => {
     return (
-      <View>
+      <Pressable>
         {senderId === user && (
-          <UserMessage message={message} time={time} seen={seen} />
+          <UserMessage
+            message={message}
+            time={time}
+            seen={seen}
+            mediaType={mediaType}
+            mediaFile={mediaFile}
+          />
         )}
         {senderId !== user && (
-          <AnotherUserMessage message={message} time={time} seen={seen} />
+          <AnotherUserMessage
+            message={message}
+            time={time}
+            mediaType={mediaType}
+            mediaFile={mediaFile}
+            seen={seen}
+          />
         )}
-      </View>
-    );
-  };
-  const ScrollDown = ({ onPress }) => {
-    return (
-      <TouchableOpacity style={styles.scrollDown} onPress={onPress}>
-        <MaterialCommunityIcons name="chevron-down-circle" size={40} />
-      </TouchableOpacity>
+      </Pressable>
     );
   };
 
@@ -118,20 +177,26 @@ function ChatBody({ user, chat }) {
         <FlatList
           ref={flatListRef}
           data={messages[0]}
+          inverted
           renderItem={({ item }) => (
             <Message
               senderId={item.sender}
-              message={item.message}
-              time={item.timestamp
-                ?.toDate()
-                .toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+              message={
+                item.sender === user
+                  ? item.message
+                  : item.translated[item.languages]
+              }
+              time={item.timestamp?.toDate().toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+              })}
+              mediaFile={item.mediaFile}
+              mediaType={item.mediaType}
               seen={item.seen}
             />
           )}
         />
       </View>
-
-      {<ScrollDown onPress={() => flatListRef.current.scrollToEnd()} />}
     </>
   );
 }
@@ -144,16 +209,18 @@ const styles = StyleSheet.create({
   },
   userMessage: {
     marginVertical: 5,
+    maxWidth: "80%",
     marginLeft: "auto",
   },
   userInner: {
-    paddingVertical: 10,
+    paddingVertical: 15,
     paddingHorizontal: 15,
     backgroundColor: "lightgrey",
     borderRadius: 30,
   },
   anotherUserMessage: {
     marginVertical: 5,
+    maxWidth: "80%",
     marginRight: "auto",
   },
   anotherUserInner: {
@@ -170,12 +237,17 @@ const styles = StyleSheet.create({
     marginLeft: "auto",
     alignItems: "baseline",
   },
-  scrollDown: {
-    width: 40,
-    height: 40,
-    alignSelf: "center",
-    top: 790,
-    position: "absolute",
+  image: {
+    borderRadius: 10,
+    width: width / 1.5,
+    height: 150,
+    marginBottom: 10,
+  },
+  video: {
+    borderRadius: 10,
+    width: width / 1.5,
+    height: 150,
+    marginBottom: 10,
   },
 });
 

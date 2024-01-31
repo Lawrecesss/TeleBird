@@ -6,6 +6,7 @@ import ChatFooter from "../components/chatComponents/ChatFooter";
 import { useNavigation } from "@react-navigation/native";
 import { getDoc, doc, setDoc } from "firebase/firestore";
 import { database } from "../configs/firebase";
+import { KeyboardAvoidingView, Platform } from "react-native";
 
 function InChatScreen(props) {
   const navigation = useNavigation();
@@ -28,15 +29,20 @@ function InChatScreen(props) {
     GenerateChat();
   }, []);
   return (
-    <Screen>
+    <Screen style={{ flex: 1 }}>
       <ChatHeader
         navigation={navigation}
         profile={profile}
         name={name}
         online={online}
       />
-      <ChatBody user={user} chat={chatId} />
-      <ChatFooter userId={user} chat={chatId} />
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS == "ios" ? "padding" : null}
+      >
+        <ChatBody user={user} chat={chatId} />
+        <ChatFooter userId={user} chat={chatId} />
+      </KeyboardAvoidingView>
     </Screen>
   );
 }

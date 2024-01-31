@@ -5,6 +5,7 @@ import { StyleSheet, View, FlatList } from "react-native";
 import ListItem from "../components/list/ListItem";
 import ListItemSeparator from "../components/list/ListItemSeparator";
 import ListItemDeleteAction from "../components/list/ListItemDeleteAction";
+import SearchBar from "../components/SearchBar";
 
 function ChannelScreen({ navigation }) {
   const messages = [
@@ -45,6 +46,7 @@ function ChannelScreen({ navigation }) {
         btnTitle={"Edit"}
         rightBtnTitle={"pencil-plus"}
       />
+      <SearchBar />
       <View style={styles.itemContainer}>
         <FlatList
           data={messages}

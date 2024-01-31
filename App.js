@@ -17,6 +17,7 @@ import SplashScreen from "./app/SplashScreen.js";
 import BottomIcon from "./components/BottomIcon.js";
 import InChatScreen from "./app/InChatScreen.js";
 import SearchFriend from "./app/SearchFriend.js";
+import SearchScreen from "./app/SearchScreen.js";
 
 const NStack = createNativeStackNavigator();
 const BStack = createBottomTabNavigator();
@@ -93,6 +94,13 @@ function Stacks() {
         initialParams={{ user: "", friend: "", profile: "", name: "" }}
       />
       <NStack.Screen name="SearchFriend" component={SearchFriend} />
+      <NStack.Group screenOptions={{ presentation: "modal" }}>
+        <NStack.Screen
+          name="Search"
+          component={SearchScreen}
+          initialParams={{ user: "" }}
+        />
+      </NStack.Group>
     </NStack.Navigator>
   );
 }
