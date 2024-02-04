@@ -15,7 +15,6 @@ export default {
     assetBundlePatterns: ["**/*"],
     ios: {
       bundleIdentifier: "com.lxwrxxce.TeleBird",
-      supportsTablet: true,
     },
     android: {
       package: "com.lxwrxxce.TeleBird",
@@ -27,7 +26,11 @@ export default {
     web: {
       favicon: "./assets/favicon.png",
     },
+
     extra: {
+      eas: {
+        projectId: "6141fd35-1d28-42c1-b717-817118abf389",
+      },
       apiKey: "AIzaSyAmzWB78N-XxWrXDPbGFPDvJ38DEfDjVbM",
       authDomain: "telebird-46364.firebaseapp.com",
       projectId: "telebird-46364",

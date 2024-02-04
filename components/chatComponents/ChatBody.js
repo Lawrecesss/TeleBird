@@ -18,18 +18,21 @@ import {
   query,
 } from "firebase/firestore";
 import { database } from "../../configs/firebase";
+import VoiceMessage from "./VoiceMessage";
 
 const { width } = Dimensions.get("window");
 
 function ChatBody({ user, chat }) {
   const flatListRef = useRef();
+  const [messages, setMessages] = useState([]);
+
   const chatRef = doc(database, "chats", chat);
   const messageCollection = collection(chatRef, "messages");
   const orderedMessages = query(
     messageCollection,
     orderBy("timestamp", "desc")
   );
-  const [messages, setMessages] = useState([]);
+
   const GetMessages = async () => {
     onSnapshot(orderedMessages, async (snapShot) => {
       const allMessages = snapShot.docs.map((doc) => {
@@ -41,7 +44,6 @@ function ChatBody({ user, chat }) {
   useEffect(() => {
     GetMessages();
   }, []);
-
   const EndComponent = ({ time, seen }) => {
     return (
       <View style={styles.timeContainer}>
@@ -68,11 +70,19 @@ function ChatBody({ user, chat }) {
       </View>
     );
   };
-  const UserMessage = ({ message, mediaFile, mediaType, time, seen }) => {
+  const UserMessage = ({
+    message,
+    voice,
+    mediaFile,
+    mediaType,
+    time,
+    seen,
+  }) => {
     return (
       <View>
         <View style={[styles.userMessage]}>
           <View style={[styles.userInner]}>
+            {voice && voice.uri !== null && <VoiceMessage voice={voice} />}
             {mediaType === "image" && mediaFile !== null && (
               <Image
                 style={styles.image}
@@ -96,7 +106,7 @@ function ChatBody({ user, chat }) {
                 useNativeControls
               />
             )}
-            {message !== null && (
+            {message && message !== null && (
               <Text numberOfLines={1000} style={[styles.text]}>
                 {message}
               </Text>
@@ -107,11 +117,18 @@ function ChatBody({ user, chat }) {
       </View>
     );
   };
-  const AnotherUserMessage = ({ message, mediaType, mediaFile, time }) => {
+  const AnotherUserMessage = ({
+    message,
+    mediaType,
+    voice,
+    mediaFile,
+    time,
+  }) => {
     return (
       <View>
         <View style={[styles.anotherUserMessage]}>
           <View style={styles.anotherUserInner}>
+            {voice && voice.uri !== null && <VoiceMessage voice={voice} />}
             {mediaType === "image" && mediaFile !== null && (
               <Image
                 style={styles.image}
@@ -131,12 +148,12 @@ function ChatBody({ user, chat }) {
                 volume={1.0}
                 isMuted={false}
                 resizeMode="cover"
-                shouldPlay
+                shouldPlay={false}
                 useNativeControls
               />
             )}
-            {message !== null && (
-              <Text numberOfLines={1000} style={styles.text}>
+            {message && message !== null && (
+              <Text numberOfLines={1000} style={[styles.text]}>
                 {message}
               </Text>
             )}
@@ -146,7 +163,15 @@ function ChatBody({ user, chat }) {
       </View>
     );
   };
-  const Message = ({ senderId, message, mediaType, time, mediaFile, seen }) => {
+  const Message = ({
+    senderId,
+    message,
+    voice,
+    mediaType,
+    time,
+    mediaFile,
+    seen,
+  }) => {
     return (
       <Pressable>
         {senderId === user && (
@@ -156,6 +181,7 @@ function ChatBody({ user, chat }) {
             seen={seen}
             mediaType={mediaType}
             mediaFile={mediaFile}
+            voice={voice}
           />
         )}
         {senderId !== user && (
@@ -164,7 +190,7 @@ function ChatBody({ user, chat }) {
             time={time}
             mediaType={mediaType}
             mediaFile={mediaFile}
-            seen={seen}
+            voice={voice}
           />
         )}
       </Pressable>
@@ -190,6 +216,7 @@ function ChatBody({ user, chat }) {
                 hour: "2-digit",
                 minute: "2-digit",
               })}
+              voice={item.voice}
               mediaFile={item.mediaFile}
               mediaType={item.mediaType}
               seen={item.seen}
@@ -213,7 +240,7 @@ const styles = StyleSheet.create({
     marginLeft: "auto",
   },
   userInner: {
-    paddingVertical: 15,
+    paddingVertical: 10,
     paddingHorizontal: 15,
     backgroundColor: "lightgrey",
     borderRadius: 30,

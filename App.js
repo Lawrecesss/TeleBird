@@ -4,7 +4,6 @@ import SignUpScreen from "./app/SignUpScreen.js";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-
 import AccountScreen from "./app/AccountScreen.js";
 import ChangeProfileScreen from "./app/ChangeProfileScreen.js";
 import ChatScreen from "./app/ChatScreen.js";
@@ -16,8 +15,9 @@ import Store from "./contexts/Store.js";
 import SplashScreen from "./app/SplashScreen.js";
 import BottomIcon from "./components/BottomIcon.js";
 import InChatScreen from "./app/InChatScreen.js";
-import SearchFriend from "./app/SearchFriend.js";
 import SearchScreen from "./app/SearchScreen.js";
+import CreateChannel from "./app/CreateChannel.js";
+import InChannelChat from "./app/InChannelChat.js";
 
 const NStack = createNativeStackNavigator();
 const BStack = createBottomTabNavigator();
@@ -44,6 +44,7 @@ function HomeStack(props) {
       <BStack.Screen
         name="Channels"
         component={ChannelScreen}
+        initialParams={{ id: id }}
         options={{
           tabBarIcon: ({ color }) => (
             <BottomIcon name={"account-group"} color={color} />
@@ -93,7 +94,18 @@ function Stacks() {
         component={InChatScreen}
         initialParams={{ user: "", friend: "", profile: "", name: "" }}
       />
-      <NStack.Screen name="SearchFriend" component={SearchFriend} />
+      <NStack.Screen name="CreateChannel" component={CreateChannel} />
+      <NStack.Screen
+        name="InChannelChat"
+        component={InChannelChat}
+        initialParams={{
+          user: "",
+          id: "",
+          name: "",
+          channelProfile: "",
+          admin: "",
+        }}
+      />
       <NStack.Group screenOptions={{ presentation: "modal" }}>
         <NStack.Screen
           name="Search"

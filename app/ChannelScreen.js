@@ -6,66 +6,41 @@ import ListItem from "../components/list/ListItem";
 import ListItemSeparator from "../components/list/ListItemSeparator";
 import ListItemDeleteAction from "../components/list/ListItemDeleteAction";
 import SearchBar from "../components/SearchBar";
+import { useNavigation } from "@react-navigation/native";
+import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+import YourChannel from "./YourChannel";
+import Channels from "./Channels";
 
-function ChannelScreen({ navigation }) {
-  const messages = [
-    {
-      title: "PSB",
-      subTitle: "Okey",
-      image:
-        "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
-      time: "9AM",
-      rightIcon: "true",
-    },
-    {
-      title: "SCS",
-      subTitle: "Okey",
-      image:
-        "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
-      time: "9AM",
-    },
-    {
-      title: "CS",
-      subTitle: "Okey",
-      image:
-        "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
-      time: "9AM",
-    },
-    {
-      title: "CU",
-      subTitle: "Okey",
-      image:
-        "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
-      time: "9AM",
-    },
-  ];
+function ChannelScreen(props) {
+  const { id } = props.route.params;
+  const navigation = useNavigation();
+  const FStack = createMaterialTopTabNavigator();
+
   return (
     <Screen>
       <Headers
         name={"Channels"}
         btnTitle={"Edit"}
         rightBtnTitle={"pencil-plus"}
+        rightOnPress={() => navigation.navigate("CreateChannel", { id: id })}
       />
-      <SearchBar />
-      <View style={styles.itemContainer}>
-        <FlatList
-          data={messages}
-          keyExtractor={(menuItem) => menuItem.title}
-          renderItem={({ item }) => (
-            <ListItem
-              style={{ backgroundColor: "white" }}
-              title={item.title}
-              subTitle={item.subTitle}
-              image={item.image}
-              time={item.time}
-              rightIcon={item.rightIcon}
-              onPress={item.onPress}
-              renderRightActions={() => <ListItemDeleteAction />}
-            />
-          )}
-          ItemSeparatorComponent={ListItemSeparator}
+      <FStack.Navigator
+        screenOptions={{ headerShown: false }}
+        initialRouteName="Channels"
+      >
+        <FStack.Screen
+          name="Followed Channels"
+          component={Channels}
+          initialParams={{
+            user: id,
+          }}
         />
-      </View>
+        <FStack.Screen
+          name="Your Channels"
+          component={YourChannel}
+          initialParams={{ user: id }}
+        />
+      </FStack.Navigator>
     </Screen>
   );
 }

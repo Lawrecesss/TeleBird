@@ -45,6 +45,8 @@ function SignUpScreen({ navigation }) {
                   username: "",
                   profilePic: "",
                   friends: [],
+                  requests: [],
+                  channels: [],
                   providerData: userCred.user.providerData[0],
                 };
                 setDoc(doc(database, "users", userCred?.user.uid), data).then(
