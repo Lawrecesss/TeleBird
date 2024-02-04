@@ -1,4 +1,4 @@
-package com.lxwrxxce.TeleBird;
+package com.telebird;
 
 import android.app.Application;
 import android.content.res.Configuration;

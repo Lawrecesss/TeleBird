@@ -1,4 +1,4 @@
-package com.lxwrxxce.TeleBird;
+package com.telebird;
 
 import android.os.Build;
 import android.os.Bundle;
