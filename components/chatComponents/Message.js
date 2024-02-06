@@ -20,7 +20,7 @@ import EditDeleteTranscriptTranslate from "./EditDeleteTranscriptTranslate";
 const { width } = Dimensions.get("window");
 function Message({
   chat,
-  transcript,
+  transcript = [""],
   user,
   tran,
   docID,
@@ -138,11 +138,12 @@ function Message({
                   },
                 ]}
                 editable={isEditing}
+                value={edited === true ? editedMessage : message}
+                autoFocus
                 onChangeText={(message) => {
                   setEdited(true);
                   setEditedMessage(message);
                 }}
-                value={edited === true ? editedMessage : message}
               ></TextInput>
             )}
             <EndComponent
@@ -241,6 +242,9 @@ function Message({
       </View>
     );
   };
+  const updateEditedMessage = async () => {
+    await updateDoc(doc(messageCollection, docID), { message: editedMessage });
+  };
   return (
     <View>
       {isPress === true && isEditing === false && (
@@ -256,7 +260,11 @@ function Message({
       {isEditing === true && (
         <View style={[styles.iconContainer]}>
           <TouchableOpacity
-            onPress={() => (setIsPress(!isPress), setIsEditing(!isEditing))}
+            onPress={() => (
+              setIsPress(!isPress),
+              setIsEditing(!isEditing),
+              updateEditedMessage()
+            )}
           >
             <MaterialCommunityIcons
               name="check"
