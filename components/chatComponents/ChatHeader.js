@@ -1,8 +1,17 @@
-import React from "react";
-import { View, StyleSheet, Image, Text } from "react-native";
+import Reac, { useState } from "react";
+import { View, StyleSheet, Image, Text, Switch } from "react-native";
 import IconButton from "../buttons/IconButton";
 
-function ChatHeader({ onPress, profile, name, navigation, story, online }) {
+function ChatHeader({
+  profile,
+  name,
+  navigation,
+  story,
+  online,
+  chat,
+  isEnabled,
+  ...otherProps
+}) {
   return (
     <View style={styles.container}>
       <IconButton
@@ -21,12 +30,14 @@ function ChatHeader({ onPress, profile, name, navigation, story, online }) {
       />
       {online === "true" && <View style={[styles.status]} />}
       <Text style={styles.text}>{name}</Text>
-      <IconButton
-        style={styles.leftIcon}
-        name={"menu"}
-        size={40}
-        onPress={onPress}
-      />
+      {chat && (
+        <IconButton
+          name={"assistant"}
+          style={{ marginLeft: "auto" }}
+          color={isEnabled ? "dodgerblue" : "black"}
+          {...otherProps}
+        />
+      )}
     </View>
   );
 }
@@ -37,7 +48,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     backgroundColor: "lightgrey",
     height: 70,
-    justifyContent: "center",
   },
   icon: { marginRight: 10 },
   image: {

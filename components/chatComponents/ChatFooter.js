@@ -15,14 +15,17 @@ function ChatFooter({ userId, chat, onPress }) {
   const [isRecording, setIsRecording] = useState(false);
   const [recordingUri, setRecordingUri] = useState(null);
   const [audioLoudness, setAudioLoudness] = useState([]);
+  const [download, setDownload] = useState();
   const [voiceMessage, setVoiceMessage] = useState(false);
+  const [recordingID, setRecordingID] = useState(null);
   const [imageUri, setImageUri] = useState(null);
   const [mediaType, setMediaType] = useState("");
   const [permissionResponse, requestPermission] = Audio.usePermissions();
   const language = ["my"];
   const messageData = {
     message: message,
-    voice: { uri: recordingUri, loudness: audioLoudness },
+    voice: { uri: recordingUri, loudness: audioLoudness, id: recordingID },
+    transcription: "",
     mediaFile: imageUri,
     mediaType: mediaType,
     languages: language,
@@ -85,27 +88,52 @@ function ChatFooter({ userId, chat, onPress }) {
       allowsRecordingIOS: false,
     });
     const uri = recording.getURI();
+    setRecordingID(generateRandomId());
     setRecordingUri(uri);
   };
+  function generateRandomId() {
+    const timestamp = Date.now();
+    const randomNumber = Math.random().toString(36).substring(2, 15); // Base 36 for alphanumeric characters
+    return `${timestamp}-${randomNumber}`;
+  }
 
   const send = async () => {
-    // const response = await fetch(imageUri);
-    // const blob = await response.blob();
-    // const storageRef = ref(
-    //   storage,
-    //   "ChatMediaFiles/" + chat + "/" + new Date().getTime()
-    // );
-    // const upload = uploadBytesResumable(storageRef, blob);
-    // upload.on(
-    //   "state_changed",
-    //   // (snapShot) => {},
-    //   () => {
-    //     getDownloadURL(upload.snapshot.ref).then((downloadURL) => {
-    //       setDownload(downloadURL);
-    //       console.log(download);
-    //     });
-    //   }
-    // );
+    if (imageUri !== null) {
+      const response = await fetch(imageUri);
+      const blob = await response.blob();
+      const storageRef = ref(
+        storage,
+        "ChatMediaFiles/" + chat + "/" + new Date().getTime()
+      );
+      const upload = uploadBytesResumable(storageRef, blob);
+      upload.on(
+        "state_changed",
+        // (snapShot) => {},
+        () => {
+          getDownloadURL(upload.snapshot.ref).then((downloadURL) => {
+            setDownload(downloadURL);
+          });
+        }
+      );
+    }
+    if (recordingUri !== null) {
+      const response = await fetch(recordingUri);
+      const blob = await response.blob();
+      const storageRef = ref(
+        storage,
+        "ChatMediaFiles/" + chat + "/" + recordingID
+      );
+      const upload = uploadBytesResumable(storageRef, blob);
+      upload.on(
+        "state_changed",
+        // (snapShot) => {},
+        () => {
+          getDownloadURL(upload.snapshot.ref).then((downloadURL) => {
+            setDownload(downloadURL);
+          });
+        }
+      );
+    }
     await addDoc(messageCollection, messageData);
     setMessage(null), setEnableHide(false);
     setImageUri(null), setVoiceMessage(false);

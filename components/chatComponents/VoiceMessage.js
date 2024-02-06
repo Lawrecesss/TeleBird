@@ -4,7 +4,7 @@ import { View, StyleSheet, Text, FlatList } from "react-native";
 import IconButton from "../buttons/IconButton";
 import { interpolate } from "react-native-reanimated";
 
-function VoiceMessage({ voice }) {
+function VoiceMessage({ voice, sender, user }) {
   const [voiceClip, setVoiceClip] = useState();
   const [playbackStatus, setPlaybackStatus] = useState({});
   const playing = playbackStatus.isPlaying;
@@ -93,8 +93,10 @@ function VoiceMessage({ voice }) {
                   height: interpolate(item, [-60, 0], [0, 100]),
                   backgroundColor:
                     progress > index / voiceLines.length
-                      ? "dodgerblue"
-                      : "grey",
+                      ? sender === user
+                        ? "dodgerblue"
+                        : "yellow"
+                      : "black",
                 },
               ]}
             />
@@ -132,7 +134,7 @@ const styles = StyleSheet.create({
     height: 30,
     width: 3,
     borderRadius: 30,
-    backgroundColor: "grey",
+    backgroundColor: "black",
   },
 });
 
