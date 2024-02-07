@@ -6,13 +6,9 @@ import { AppFormField } from "../components/forms";
 import { Formik } from "formik";
 import CancelNDone from "../components/buttons/CancelNDone";
 import * as Yup from "yup";
-import { updateDoc, doc } from "firebase/firestore";
+import { updateDoc, doc, getDoc } from "firebase/firestore";
 import { database } from "../configs/firebase";
 import { useNavigation } from "@react-navigation/native";
-
-const validationSchema = Yup.object({
-  username: Yup.string().required().min(4).label("Username"),
-});
 
 function ChangeProfileScreen(props) {
   const navigation = useNavigation();
@@ -21,12 +17,25 @@ function ChangeProfileScreen(props) {
     imageUri = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
     setImageUri,
   ] = useState();
+  const [username, setUsername] = useState("");
   const requetPermission = async () => {
     const { granted } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (!granted)
       alert("You will need to grant the permission to access the media");
   };
+  const getUserData = async () => {
+    const userData = (await getDoc(doc(database, "users", id))).data();
+    setImageUri(userData.profilePic);
+    setUsername(userData.username);
+  };
+  const validationSchema = Yup.object({
+    username:
+      username !== ""
+        ? Yup.string().min(4).label("Username")
+        : Yup.string().required().min(4).label("Username"),
+  });
   useEffect(() => {
+    getUserData();
     requetPermission();
   }, []);
   const selectImage = async () => {
@@ -71,6 +80,7 @@ function ChangeProfileScreen(props) {
               autoCapitalize="none"
               autoCorrect={false}
               icon={"account"}
+              defaultValue={username}
               placeholder="Username"
             />
 

@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet, FlatList, Text } from "react-native";
-import SearchBar from "../components/SearchBar";
+import { View, StyleSheet, FlatList, TextInput } from "react-native";
 import IconButton from "../components/buttons/IconButton";
 import { useNavigation } from "@react-navigation/native";
 import {
   doc,
+  getDoc,
   collection,
   getDocs,
   query,
@@ -13,13 +13,22 @@ import {
 } from "firebase/firestore";
 import { database } from "../configs/firebase";
 import ListItem from "../components/list/ListItem";
+import { AppTextInput } from "../components/forms";
 
 function SearchScreen(props) {
   const { user } = props.route.params;
   const navigation = useNavigation();
+  const [friendList, setFriendList] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [data, setData] = useState();
   const collectionRef = collection(database, "users");
+  const getUserFriendList = async () => {
+    const userData = (await getDoc(doc(database, "users", user))).data();
+    setFriendList(userData.friends);
+  };
+  useEffect(() => {
+    getUserFriendList();
+  }, []);
   const handleSearch = async (text) => {
     setSearchQuery(text);
     if (searchQuery !== "") {
@@ -52,7 +61,7 @@ function SearchScreen(props) {
           style={styles.icon}
           onPress={() => navigation.goBack()}
         />
-        <SearchBar
+        <AppTextInput
           style={styles.searchBar}
           clearButtonMode="always"
           autoCapitalize="none"
@@ -69,7 +78,7 @@ function SearchScreen(props) {
               <ListItem
                 title={item.username}
                 image={item.profilePic}
-                friendRequest
+                friendRequest={friendList?.includes(item._id) ? false : true}
                 friendRequestOnPress={() => handleRequest(item._id)}
               />
             )}
@@ -83,8 +92,16 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     backgroundColor: "lightgrey",
+    padding: 10,
   },
-  searchBar: {},
+  searchBar: {
+    padding: 10,
+    width: 350,
+    backgroundColor: "white",
+    borderColor: "lightgrey",
+    borderWidth: 2,
+    borderRadius: 50,
+  },
   icon: {
     alignSelf: "center",
   },

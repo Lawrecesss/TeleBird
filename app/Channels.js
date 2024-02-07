@@ -27,7 +27,7 @@ function Channels(props) {
   };
   useEffect(() => {
     getUserData();
-  }, [SearchBar, ListItem]);
+  }, []);
   return (
     <View>
       <SearchBar user={user} />

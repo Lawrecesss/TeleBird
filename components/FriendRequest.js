@@ -72,18 +72,18 @@ function FriendRequest({ profile, name, userID, requestID, friendList }) {
     );
   };
   return (
-    <TouchableHighlight
-      onPress={() => console.log("clicked")}
-      underlayColor={"lightgrey"}
-    >
-      <View
-        style={{
-          flex: 1,
-          justifyContent: !name && !profile ? "center" : "flex-start",
-          backgroundColor: "white",
-        }}
+    <>
+      <TouchableHighlight
+        onPress={() => console.log("clicked")}
+        underlayColor={"lightgrey"}
       >
-        {requestList != [] && (
+        <View
+          style={{
+            flex: 1,
+            justifyContent: !name && !profile ? "center" : "flex-start",
+            backgroundColor: "white",
+          }}
+        >
           <View style={styles.applicationContainer}>
             <ListItem
               image={profile}
@@ -92,16 +92,9 @@ function FriendRequest({ profile, name, userID, requestID, friendList }) {
             />
             <AcceptButton />
           </View>
-        )}
-        {requestList == [] && (
-          <View style={{ justifyContent: "center" }}>
-            <Text style={styles.text}>
-              You do not recieve any friend request at the moment.
-            </Text>
-          </View>
-        )}
-      </View>
-    </TouchableHighlight>
+        </View>
+      </TouchableHighlight>
+    </>
   );
 }
 const styles = StyleSheet.create({

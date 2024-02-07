@@ -18,6 +18,8 @@ import InChatScreen from "./app/InChatScreen.js";
 import SearchScreen from "./app/SearchScreen.js";
 import CreateChannel from "./app/CreateChannel.js";
 import InChannelChat from "./app/InChannelChat.js";
+import DefaultLanguageScreen from "./app/DefaultLanguageScreen.js";
+import ChangeSecurity from "./app/ChangeSecurity.js";
 
 const NStack = createNativeStackNavigator();
 const BStack = createBottomTabNavigator();
@@ -79,11 +81,13 @@ function Stacks() {
       <NStack.Screen name="SlpashScreen" component={SplashScreen} />
       <NStack.Screen name="LogInScreen" component={LogInScreen} />
       <NStack.Screen name="SignUpScreen" component={SignUpScreen} />
+      <NStack.Screen name="SetProfileScreen" component={SetProfileScreen} />
       <NStack.Screen
         name="ChangeProfileScreen"
         component={ChangeProfileScreen}
       />
-      <NStack.Screen name="SetProfileScreen" component={SetProfileScreen} />
+      <NStack.Screen name="DefaultLanguage" component={DefaultLanguageScreen} />
+      <NStack.Screen name="Security" component={ChangeSecurity} />
       <NStack.Screen
         name="Home"
         component={HomeStack}

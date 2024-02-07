@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, FlatList, Alert } from "react-native";
+import { View, FlatList, Alert, Text } from "react-native";
 import {
   collection,
   getDocs,
@@ -50,32 +50,48 @@ function YourChannel(props) {
   };
   useEffect(() => {
     getData();
-  }, [channels]);
+  }, []);
   return (
     <View style={{ flex: 1 }}>
-      <FlatList
-        data={channels}
-        renderItem={({ item }) => (
-          <ListItem
-            style={{ backgroundColor: "white" }}
-            title={item.data.channelName}
-            image={item.data.channelProfile}
-            onPress={() =>
-              navigation.navigate("InChannelChat", {
-                user: user,
-                id: item.id,
-                name: item.data.channelName,
-                channelProfile: item.data.channelProfile,
-                admin: item.data.admin,
-              })
-            }
-            renderRightActions={() => (
-              <ListItemDeleteAction onPress={() => deleteChannel(item.id)} />
-            )}
-          />
-        )}
-        ItemSeparatorComponent={ListItemSeparator}
-      />
+      {channels.length !== 0 && (
+        <FlatList
+          data={channels}
+          renderItem={({ item }) => (
+            <ListItem
+              style={{ backgroundColor: "white" }}
+              title={item.data.channelName}
+              image={item.data.channelProfile}
+              onPress={() =>
+                navigation.navigate("InChannelChat", {
+                  user: user,
+                  id: item.id,
+                  name: item.data.channelName,
+                  channelProfile: item.data.channelProfile,
+                  admin: item.data.admin,
+                })
+              }
+              renderRightActions={() => (
+                <ListItemDeleteAction onPress={() => deleteChannel(item.id)} />
+              )}
+            />
+          )}
+          ItemSeparatorComponent={ListItemSeparator}
+        />
+      )}
+      {channels.length === 0 && (
+        <View
+          style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+        >
+          <Text
+            style={{
+              fontSize: 20,
+              fontWeight: "bold",
+            }}
+          >
+            You don't have any channel to manage.
+          </Text>
+        </View>
+      )}
     </View>
   );
 }

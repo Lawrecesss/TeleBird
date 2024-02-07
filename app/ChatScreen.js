@@ -76,7 +76,7 @@ function ChatScreen(props) {
         name={"Chats"}
         btnTitle={"Edit"}
         rightBtnTitle={"pencil-plus"}
-        rightOnPress={() => navigation.navigate("SearchFriend")}
+        rightOnPress={() => navigation.navigate("Friends")}
       />
 
       <View style={styles.itemContainer}>

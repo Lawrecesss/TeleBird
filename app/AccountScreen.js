@@ -37,23 +37,20 @@ function AccountScreen(props) {
       },
       onPress: () => navigation.navigate("ChangeProfileScreen", { id: id }),
     },
-    {
-      title: "Theme",
-      icon: {
-        name: "theme-light-dark",
-      },
-    },
+
     {
       title: "Default Language",
       icon: {
         name: "translate",
       },
+      onPress: () => navigation.navigate("DefaultLanguage"),
     },
     {
       title: "Security",
       icon: {
         name: "security",
       },
+      onPress: () => navigation.navigate("Security"),
     },
   ];
   return (

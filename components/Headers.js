@@ -13,11 +13,6 @@ function Headers({
 }) {
   return (
     <View style={styles.container}>
-      <TextButton
-        title={btnTitle}
-        textColor={"dodgerblue"}
-        onPress={leftOnPress}
-      />
       <Text style={styles.text}>{name}</Text>
       <IconButton
         style={styles.icon}

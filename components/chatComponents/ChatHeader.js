@@ -1,5 +1,5 @@
-import Reac, { useState } from "react";
-import { View, StyleSheet, Image, Text, Switch } from "react-native";
+import React, { useState } from "react";
+import { View, StyleSheet, Image, Text } from "react-native";
 import IconButton from "../buttons/IconButton";
 
 function ChatHeader({
@@ -30,14 +30,6 @@ function ChatHeader({
       />
       {online === "true" && <View style={[styles.status]} />}
       <Text style={styles.text}>{name}</Text>
-      {chat && (
-        <IconButton
-          name={"assistant"}
-          style={{ marginLeft: "auto" }}
-          color={isEnabled ? "dodgerblue" : "black"}
-          {...otherProps}
-        />
-      )}
     </View>
   );
 }

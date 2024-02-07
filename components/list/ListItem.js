@@ -83,7 +83,7 @@ function ListItem({
                 )}
               </View>
             )}
-            {friendRequest && (
+            {friendRequest === true && (
               <TouchableOpacity
                 style={styles.friendRequest}
                 onPress={friendRequestOnPress}

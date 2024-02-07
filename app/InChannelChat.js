@@ -14,8 +14,7 @@ import ChatFooter from "../components/chatComponents/ChatFooter";
 import { useNavigation } from "@react-navigation/native";
 import ChannelChatBody from "../components/chatComponents/ChannelChatBody";
 import { database } from "../configs/firebase";
-import { channel } from "expo-updates";
-
+import ChannelFooter from "../components/chatComponents/ChannelFooter";
 function InChannelChat(props) {
   const navigation = useNavigation();
   const { user, id, name, channelProfile, admin } = props.route.params;
@@ -48,7 +47,7 @@ function InChannelChat(props) {
   };
   useEffect(() => {
     getChannelList();
-  }, [follow, unfollow]);
+  }, []);
   return (
     <Screen style={{ flex: 1 }}>
       <ChatHeader
@@ -67,7 +66,7 @@ function InChannelChat(props) {
           profile={channelProfile}
           name={name}
         />
-        {user === admin && <ChatFooter userId={user} chat={id} />}
+        {user === admin && <ChannelFooter userId={user} chat={id} />}
         {user !== admin && (
           <TouchableHighlight
             style={styles.follow}

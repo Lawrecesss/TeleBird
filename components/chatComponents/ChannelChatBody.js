@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { View, StyleSheet, FlatList, Text, Image } from "react-native";
-import { collection, doc, getDocs } from "firebase/firestore";
+import { collection, doc, getDocs, onSnapshot } from "firebase/firestore";
 import { database } from "../../configs/firebase";
 
 function ChannelChatBody({ id, admin, user, profile, name }) {
@@ -8,17 +8,19 @@ function ChannelChatBody({ id, admin, user, profile, name }) {
   const postCollectionRef = collection(channelDocRef, "posts");
   const [posts, setPosts] = useState([]);
   const getData = async () => {
-    const allPostDocs = await getDocs(postCollectionRef);
-    const postData = allPostDocs.docs.map((doc) => {
-      return doc.data();
+    onSnapshot(postCollectionRef, async (snapShot) => {
+      const postData = snapShot.docs.map((doc) => {
+        return doc.data();
+      });
+      setPosts(postData);
     });
-    setPosts(postData);
   };
+
   useEffect(() => {
     getData();
   }, []);
 
-  const PostContainer = ({ post }) => {
+  const PostContainer = ({ post, time }) => {
     return (
       <View style={styles.postContainer}>
         <View style={styles.poster}>
@@ -28,6 +30,9 @@ function ChannelChatBody({ id, admin, user, profile, name }) {
         <View style={styles.post}>
           <Text>{post}</Text>
         </View>
+        <View style={{ marginTop: 10, marginLeft: "auto" }}>
+          <Text>{time}</Text>
+        </View>
       </View>
     );
   };
@@ -36,7 +41,15 @@ function ChannelChatBody({ id, admin, user, profile, name }) {
       <View style={styles.container}>
         <FlatList
           data={posts}
-          renderItem={({ item }) => <PostContainer post={item.post} />}
+          renderItem={({ item }) => (
+            <PostContainer
+              post={item.message}
+              time={item.timestamp?.toDate().toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+              })}
+            />
+          )}
         />
       </View>
     );

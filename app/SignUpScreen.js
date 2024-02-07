@@ -10,6 +10,7 @@ import { setDoc, doc } from "firebase/firestore";
 
 const validationSchema = Yup.object({
   email: Yup.string().required().email().label("Email"),
+  username: Yup.string().required().label("Username"),
   createPassword: Yup.string().required().min(8).label("Create Password"),
   password: Yup.string()
     .required()
@@ -29,6 +30,7 @@ function SignUpScreen({ navigation }) {
       <Formik
         initialValues={{
           email: "",
+          username: "",
           createPassword: "",
           password: "",
         }}
@@ -42,18 +44,16 @@ function SignUpScreen({ navigation }) {
               .then((userCred) => {
                 const data = {
                   _id: userCred?.user.uid,
-                  username: "",
-                  profilePic: "",
+                  username: values.username,
+                  profilePic:
+                    "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
                   friends: [],
                   requests: [],
                   channels: [],
                   providerData: userCred.user.providerData[0],
                 };
                 setDoc(doc(database, "users", userCred?.user.uid), data).then(
-                  () => console.log("added to the database"),
-                  navigation.navigate("SetProfileScreen", {
-                    id: userCred.user.uid,
-                  })
+                  () => console.log("added to the database")
                 );
               })
               .catch((err) => Alert.alert("Sign up error", err.message));
@@ -69,6 +69,14 @@ function SignUpScreen({ navigation }) {
             autoCorrect={false}
             icon={"email"}
             placeholder="Email"
+          />
+          <AppFormField
+            style={styles.input}
+            name={"username"}
+            autoCapitalize="none"
+            autoCorrect={false}
+            icon={"account"}
+            placeholder="Username"
           />
 
           <AppFormField
