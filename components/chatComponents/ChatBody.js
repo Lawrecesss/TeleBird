@@ -47,7 +47,6 @@ function ChatBody({ user, chat, isEnabled }) {
         return {
           transcription: transcriptData.transcription["0"][0],
           id: id,
-          timestamp: transcriptData.created,
         };
       });
     setTranscript(transcriptDoc);

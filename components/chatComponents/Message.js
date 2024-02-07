@@ -11,7 +11,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { collection, doc, updateDoc } from "firebase/firestore";
+import { collection, doc, getDoc, updateDoc } from "firebase/firestore";
 import { database } from "../../configs/firebase";
 import VoiceMessage from "./VoiceMessage";
 import EmojiBar from "./EmojiBar";
@@ -20,7 +20,7 @@ import EditDeleteTranscriptTranslate from "./EditDeleteTranscriptTranslate";
 const { width } = Dimensions.get("window");
 function Message({
   chat,
-  transcript = [""],
+  transcript,
   user,
   tran,
   docID,
@@ -209,19 +209,31 @@ function Message({
   };
 
   const renderTranscript = async () => {
-    const trancription = transcript
-      .filter((doc) => {
-        return doc.id === voice.id;
-      })
-      .map((doc) => {
-        return doc.transcription;
-      });
-    if (tran === "" || tran.length === 0) {
-      await updateDoc(doc(messageCollection, docID), {
-        transcription: trancription,
-      });
+    if (Array.isArray(transcript)) {
+      const trancription = transcript
+        .filter((doc) => {
+          return doc.id === voice.id;
+        })
+        .map((doc) => {
+          return doc.transcription;
+        });
+      if (tran === "" || tran.length === 0) {
+        await updateDoc(doc(messageCollection, docID), {
+          transcription: trancription,
+        });
+      }
+
+      const getTranslated = getDoc(doc(messageCollection, docID));
+      const language = (await getTranslated).data().languages[0];
+      const translatedIndex = (await getTranslated).data().translated["0"];
+      if (translatedIndex && translatedIndex[language]) {
+        const translatedTranscription = translatedIndex[language];
+
+        setSubtitle(senderId === user ? trancription : translatedTranscription);
+      } else {
+        setSubtitle("Loading...");
+      }
     }
-    setSubtitle(trancription);
   };
   useEffect(() => {
     renderTranscript();
