@@ -88,7 +88,11 @@ function Stacks() {
         name="ChangeProfileScreen"
         component={ChangeProfileScreen}
       />
-      <NStack.Screen name="DefaultLanguage" component={DefaultLanguageScreen} />
+      <NStack.Screen
+        name="DefaultLanguage"
+        component={DefaultLanguageScreen}
+        initialParams={{ id: "" }}
+      />
       <NStack.Screen name="Security" component={ChangeSecurity} />
       <NStack.Screen name="ChangeEmail" component={ChangeEmail} />
       <NStack.Screen name="ChangePassword" component={ChangePassword} />

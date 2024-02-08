@@ -9,9 +9,18 @@ import Languages from "../components/Languages";
 import ListItem from "../components/list/ListItem";
 import { AppTextInput } from "../components/forms";
 import ListItemSeparator from "../components/list/ListItemSeparator";
+import { doc, updateDoc } from "firebase/firestore";
+import { database } from "../configs/firebase";
 
 function DefaultLanguageScreen(props) {
+  const { id } = props.route.params;
   const navigation = useNavigation();
+  const onPress = (v) => {
+    const language = Object.entries(Languages).find(
+      ([key, value]) => value === v
+    )[0];
+    updateDoc(doc(database, "users", id), { language: language });
+  };
   return (
     <Screen>
       <View style={styles.header}>
@@ -27,28 +36,25 @@ function DefaultLanguageScreen(props) {
           textColor={"dodgerblue"}
         />
       </View>
-      <View
-        style={{
-          alignItems: "center",
-        }}
-      >
-        <AppTextInput
-          icon={"magnify"}
-          placeholder="Search"
-          style={[styles.search]}
-          textSize={18}
-          autoCapitalize="none"
-          autoCorrect={false}
 
-          //   value={searchQuery}
-          //   onPressIn={() => onPressIn()}
-          //   onChangeText={(text) => handleSearch(text)}
-        />
-      </View>
       <FlatList
         data={Object.values(Languages)}
-        renderItem={({ item }) => <ListItem title={item} />}
-        ItemSeparatorComponent={ListItemSeparator}
+        renderItem={({ item }) => (
+          <View style={{ alignSelf: "center" }}>
+            <ListItem
+              title={item}
+              style={{
+                backgroundColor: "white",
+                width: 390,
+                borderRadius: 20,
+                height: 70,
+                borderWidth: 1,
+                marginVertical: 3,
+              }}
+              onPress={() => onPress(item)}
+            />
+          </View>
+        )}
       />
     </Screen>
   );

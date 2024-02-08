@@ -1,14 +1,20 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, StyleSheet, Image, Text } from "react-native";
 import IconButton from "../buttons/IconButton";
 import { AppTextInput } from "../forms";
-import { doc, collection, addDoc, serverTimestamp } from "firebase/firestore";
+import {
+  doc,
+  collection,
+  addDoc,
+  serverTimestamp,
+  getDoc,
+} from "firebase/firestore";
 import { database, storage } from "../../configs/firebase";
 import * as ImagePicker from "expo-image-picker";
 import { Video, Audio } from "expo-av";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
-function ChatFooter({ userId, chat, onPress }) {
+function ChatFooter({ userId, chat, onPress, friendId }) {
   const [message, setMessage] = useState(null);
   const [hide, setEnableHide] = useState(false);
   const [recording, setRecording] = useState();
@@ -21,11 +27,12 @@ function ChatFooter({ userId, chat, onPress }) {
   const [imageUri, setImageUri] = useState(null);
   const [mediaType, setMediaType] = useState("");
   const [permissionResponse, requestPermission] = Audio.usePermissions();
-  const language = ["my"];
+  const [language, setLanguage] = useState("");
   const messageData = {
     message: message,
     voice: { uri: recordingUri, loudness: audioLoudness, id: recordingID },
     transcription: "",
+    edited: false,
     mediaFile: imageUri,
     mediaType: mediaType,
     languages: language,
@@ -139,7 +146,13 @@ function ChatFooter({ userId, chat, onPress }) {
     setImageUri(null), setVoiceMessage(false);
     setRecordingUri(null), setAudioLoudness([]);
   };
-
+  const getLanguage = async () => {
+    const friendData = (await getDoc(doc(database, "users", friendId))).data();
+    setLanguage([friendData.language]);
+  };
+  useEffect(() => {
+    getLanguage();
+  }, []);
   return (
     <View
       style={[

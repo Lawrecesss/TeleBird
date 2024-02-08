@@ -5,22 +5,26 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 function EditDeleteTranscriptTranslate({ style, edit, deletE, transcribe }) {
   return (
     <View style={[styles.container, style]}>
-      <TouchableOpacity>
-        <MaterialCommunityIcons
-          name="comment-edit"
-          size={25}
-          color={"dodgerblue"}
-          onPress={edit}
-        />
-      </TouchableOpacity>
-      <TouchableOpacity>
-        <MaterialCommunityIcons
-          name="delete-forever"
-          size={25}
-          color={"dodgerblue"}
-          onPress={deletE}
-        />
-      </TouchableOpacity>
+      {edit && (
+        <TouchableOpacity>
+          <MaterialCommunityIcons
+            name="comment-edit"
+            size={25}
+            color={"dodgerblue"}
+            onPress={edit}
+          />
+        </TouchableOpacity>
+      )}
+      {deletE && (
+        <TouchableOpacity>
+          <MaterialCommunityIcons
+            name="delete-forever"
+            size={25}
+            color={"dodgerblue"}
+            onPress={deletE}
+          />
+        </TouchableOpacity>
+      )}
       <TouchableOpacity>
         <MaterialCommunityIcons
           name="subtitles"

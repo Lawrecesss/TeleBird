@@ -11,7 +11,13 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { collection, doc, getDoc, updateDoc } from "firebase/firestore";
+import {
+  collection,
+  deleteDoc,
+  doc,
+  getDoc,
+  updateDoc,
+} from "firebase/firestore";
 import { database } from "../../configs/firebase";
 import VoiceMessage from "./VoiceMessage";
 import EmojiBar from "./EmojiBar";
@@ -19,6 +25,7 @@ import EditDeleteTranscriptTranslate from "./EditDeleteTranscriptTranslate";
 
 const { width } = Dimensions.get("window");
 function Message({
+  edit,
   chat,
   transcript,
   user,
@@ -54,7 +61,15 @@ function Message({
             />
           </View>
         )}
+
         <View style={styles.timeContainer}>
+          {edit === true && (
+            <Text
+              style={{ fontSize: 10, color: "dodgerblue", marginRight: 10 }}
+            >
+              edited
+            </Text>
+          )}
           <Text
             style={{
               fontSize: 12,
@@ -261,11 +276,17 @@ function Message({
     );
   };
   const updateEditedMessage = async () => {
-    await updateDoc(doc(messageCollection, docID), { message: editedMessage });
+    await updateDoc(doc(messageCollection, docID), {
+      message: editedMessage,
+      edited: edited,
+    });
+  };
+  const deleteMessage = async () => {
+    await deleteDoc(doc(messageCollection, docID));
   };
   return (
     <View>
-      {isPress === true && isEditing === false && (
+      {isPress === true && isEditing === false && senderId === user && (
         <EditDeleteTranscriptTranslate
           style={{
             marginLeft: senderId === user ? "auto" : 0,
@@ -273,6 +294,16 @@ function Message({
           }}
           transcribe={() => setTranscribe(!transcribe)}
           edit={() => setIsEditing(!isEditing)}
+          deletE={() => deleteMessage()}
+        />
+      )}
+      {isPress === true && isEditing === false && senderId !== user && (
+        <EditDeleteTranscriptTranslate
+          style={{
+            marginLeft: senderId === user ? "auto" : 0,
+            width: 35,
+          }}
+          transcribe={() => setTranscribe(!transcribe)}
         />
       )}
       {isEditing === true && (
@@ -281,7 +312,8 @@ function Message({
             onPress={() => (
               setIsPress(!isPress),
               setIsEditing(!isEditing),
-              updateEditedMessage()
+              updateEditedMessage(),
+              setEdited(true)
             )}
           >
             <MaterialCommunityIcons
@@ -308,6 +340,7 @@ function Message({
             voice={voice}
             emoji={emoji}
             sender={senderId}
+            edited={edit}
           />
         </Pressable>
       )}
@@ -320,6 +353,7 @@ function Message({
             mediaFile={mediaFile}
             voice={voice}
             emoji={emoji}
+            edited={edit}
             sender={senderId}
           />
         </Pressable>

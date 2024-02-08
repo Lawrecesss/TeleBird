@@ -43,7 +43,7 @@ function AccountScreen(props) {
       icon: {
         name: "translate",
       },
-      onPress: () => navigation.navigate("DefaultLanguage"),
+      onPress: () => navigation.navigate("DefaultLanguage", { id: id }),
     },
     {
       title: "Security",

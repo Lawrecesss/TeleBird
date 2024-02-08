@@ -75,6 +75,7 @@ function ChatBody({ user, chat, isEnabled }) {
         renderItem={({ item }) => (
           <Message
             chat={chat}
+            edit={item.data.edited}
             transcript={transcript}
             user={user}
             senderId={item.data.sender}

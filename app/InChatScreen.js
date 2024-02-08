@@ -24,8 +24,6 @@ function InChatScreen(props) {
     doc(database, "users", friend),
   ];
 
-  const keywords = ["send message", "read message"];
-
   const start = async () => {
     setIsEnabled(true);
 
@@ -45,12 +43,6 @@ function InChatScreen(props) {
       setError(error);
     }
   };
-  // useEffect(() => {
-  //   Voice.onSpeechStart = () => setIsRecording(true);
-  //   Voice.onSpeechEnd = () => setIsRecording(false);
-  //   Voice.onSpeechError = (err) => setError(err.error);
-  //   Voice.onSpeechResults = (r) => setResult(r.value);
-  // }, []);
   const GenerateChat = async () => {
     await getDoc(doc(database, "chats", chatId)).then((docSnap) => {
       if (docSnap.exists()) {
@@ -79,7 +71,7 @@ function InChatScreen(props) {
         behavior={Platform.OS == "ios" ? "padding" : null}
       >
         <ChatBody user={user} chat={chatId} />
-        <ChatFooter userId={user} chat={chatId} />
+        <ChatFooter userId={user} chat={chatId} friendId={friend} />
       </KeyboardAvoidingView>
     </Screen>
   );
