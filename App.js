@@ -20,6 +20,8 @@ import CreateChannel from "./app/CreateChannel.js";
 import InChannelChat from "./app/InChannelChat.js";
 import DefaultLanguageScreen from "./app/DefaultLanguageScreen.js";
 import ChangeSecurity from "./app/ChangeSecurity.js";
+import ChangeEmail from "./app/ChangeEmail.js";
+import ChangePassword from "./app/ChangePassword.js";
 
 const NStack = createNativeStackNavigator();
 const BStack = createBottomTabNavigator();
@@ -88,6 +90,8 @@ function Stacks() {
       />
       <NStack.Screen name="DefaultLanguage" component={DefaultLanguageScreen} />
       <NStack.Screen name="Security" component={ChangeSecurity} />
+      <NStack.Screen name="ChangeEmail" component={ChangeEmail} />
+      <NStack.Screen name="ChangePassword" component={ChangePassword} />
       <NStack.Screen
         name="Home"
         component={HomeStack}

@@ -1,11 +1,24 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, FlatList } from "react-native";
 import Screen from "../components/screens/Screen";
 import IconButton from "../components/buttons/IconButton";
 import TextButton from "../components/buttons/TextButton";
 import { useNavigation } from "@react-navigation/native";
+import ListItem from "../components/list/ListItem";
+import ListItemSeparator from "../components/list/ListItemSeparator";
+import { auth } from "../configs/firebase";
+import Icon from "../components/Icon";
 
 function ChangeSecurity(props) {
+  const email = auth.currentUser.email;
+  const functions = [
+    {
+      name: "Change Password",
+      subtitle: "********",
+      icon: "form-textbox-password",
+      onPress: () => navigation.navigate("ChangePassword"),
+    },
+  ];
   const navigation = useNavigation();
   return (
     <Screen>
@@ -22,6 +35,18 @@ function ChangeSecurity(props) {
           textColor={"dodgerblue"}
         />
       </View>
+      <FlatList
+        data={functions}
+        renderItem={({ item }) => (
+          <ListItem
+            title={item.name}
+            subTitle={item.subtitle}
+            onPress={item.onPress}
+            IconComponent={<Icon name={item.icon} size={50} color="black" />}
+          />
+        )}
+        ItemSeparatorComponent={ListItemSeparator}
+      />
     </Screen>
   );
 }

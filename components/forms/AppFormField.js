@@ -14,7 +14,7 @@ function AppFormField({ name, style, ...otherProps }) {
         {...otherProps}
         style={[
           style,
-          { borderColor: errors[name] && touched[name] ? "red" : "white" },
+          { borderColor: errors[name] && touched[name] ? "red" : "grey" },
         ]}
       />
       <ErrorMessageText error={errors[name]} visible={touched[name]} />
