@@ -78,8 +78,8 @@ function InChatScreen(props) {
         style={{ flex: 1 }}
         behavior={Platform.OS == "ios" ? "padding" : null}
       >
-        <ChatBody user={user} chat={chatId} isEnabled={isEnabled} />
-        {isEnabled !== true && <ChatFooter userId={user} chat={chatId} />}
+        <ChatBody user={user} chat={chatId} />
+        <ChatFooter userId={user} chat={chatId} />
       </KeyboardAvoidingView>
     </Screen>
   );

@@ -217,6 +217,7 @@ function Message({
         .map((doc) => {
           return doc.transcription;
         });
+
       if (tran === "" || tran.length === 0) {
         await updateDoc(doc(messageCollection, docID), {
           transcription: trancription,
@@ -225,11 +226,16 @@ function Message({
 
       const getTranslated = getDoc(doc(messageCollection, docID));
       const language = (await getTranslated).data().languages[0];
-      const translatedIndex = (await getTranslated).data().translated["0"];
-      if (translatedIndex && translatedIndex[language]) {
-        const translatedTranscription = translatedIndex[language];
+      if ((await getTranslated).data().translatedTranscription) {
+        const translatedIndex = (await getTranslated).data()
+          .translatedTranscription["0"];
+        if (translatedIndex && translatedIndex[language]) {
+          const translatedTranscription = translatedIndex[language];
 
-        setSubtitle(senderId === user ? trancription : translatedTranscription);
+          setSubtitle(
+            senderId === user ? trancription : translatedTranscription
+          );
+        }
       } else {
         setSubtitle("Loading...");
       }
