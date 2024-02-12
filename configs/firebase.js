@@ -6,12 +6,7 @@ import { getStorage } from "firebase/storage";
 import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
 window.navigator.userAgent = "ReactNative"; // javascript
 const firebaseConfig = {
-  apiKey: "AIzaSyAmzWB78N-XxWrXDPbGFPDvJ38DEfDjVbM",
-  authDomain: "telebird-46364.firebaseapp.com",
-  projectId: "telebird-46364",
-  storageBucket: "telebird-46364.appspot.com",
-  messagingSenderId: "313603458075",
-  appId: "1:313603458075:web:fb1a3c15167c413b0864be",
+  
 };
 
 const app = getApps.length > 0 ? getApp() : initializeApp(firebaseConfig);
